@@ -341,10 +341,16 @@ describe("model matrix", () => {
         const { fields } = parseFrontmatter(text);
         expect(fields.name).toBe(name);
         expect(fields.model).toBe(family.model);
+        expect(fields.model).not.toMatch(/1m/i);
         expect(fields["reasoning-effort"]).toBe(effort);
         expect(fields.tools).toBe(
           '["read", "search", "execute", "edit", "todo", "web"]'
         );
+        if (family.contextTier === undefined) {
+          expect(fields["context-tier"]).toBeUndefined();
+        } else {
+          expect(fields["context-tier"]).toBe(family.contextTier);
+        }
       }
     }
     const shipped = readdirSync(AGENTS_DIR)
@@ -369,6 +375,9 @@ describe("model matrix", () => {
     );
     expect(sheet).toContain("copilot:kimi-k3@high");
     expect(sheet).not.toContain("copilot:claude-opus-4.8@high");
+    expect(sheet).not.toContain("claude-opus-5-1m");
+    expect(setup).toContain("opus5");
+    expect(setup).not.toContain("opus48");
     expect(sheet).not.toContain("claude:fable");
     expect(sheet).not.toContain("grok:grok-4.6");
     expect(setup).toContain("~/.copilot/pstack-models.md");

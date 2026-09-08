@@ -1,9 +1,10 @@
 ---
-name: pstack-opus48-low
-description: Native Copilot lane for pstack roles configured as copilot:claude-opus-4.8@low.
+name: pstack-opus5-medium
+description: Native Copilot lane for pstack roles configured as copilot:claude-opus-5@medium.
 tools: ["read", "search", "execute", "edit", "todo", "web"]
-model: claude-opus-4.8
-reasoning-effort: low
+model: claude-opus-5
+reasoning-effort: medium
+context-tier: default
 ---
 
 # pstack Copilot lane

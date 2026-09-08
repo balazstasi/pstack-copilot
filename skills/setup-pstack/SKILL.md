@@ -132,7 +132,7 @@ Use this section when step 1 recorded Copilot CLI. Keep Why and Reflect on `inhe
 
 ### Copilot efforts and probes
 
-Ask one effort question per Copilot-native family: terra, copilot-sol, luna, opus48, kimi. Name each model, its current or proposed value, and the Selectable efforts from the Copilot-native table. Empty input keeps a current value or accepts that row's Default effort.
+Ask one effort question per Copilot-native family: terra, copilot-sol, luna, opus5, kimi. Name each model, its current or proposed value, and the Selectable efforts from the Copilot-native table. Empty input keeps a current value or accepts that row's Default effort.
 
 Probe only those selected `copilot:model@effort` pairs. Each probe is a one-turn native `task` to `pstack:pstack-<stem>-<effort>`. The child must report the configured model. A silent downgrade to the parent session model is a failed probe. A failed probe writes nothing.
 
@@ -171,4 +171,4 @@ Require the final Copilot role map to contain at least one descriptor from each 
 
 Write `~/.copilot/pstack-models.md` and the bounded include in `~/.copilot/copilot-instructions.md` only after every native probe passes and the operator confirms. Snapshot, write, read back, restore on failure, same as step 8.
 
-Before declaring setup complete, run one small read-only mixed panel: terra, sol, opus48, and kimi, distinct output paths, then a lead synthesis on the parent. That smoke also proves `subagents.maxConcurrency` is at least 4. If only two lanes start, stop and raise concurrency before writing a passing report.
+Before declaring setup complete, run one small read-only mixed panel: terra, sol, opus5, and kimi, distinct output paths, then a lead synthesis on the parent. That smoke also proves `subagents.maxConcurrency` is at least 4. If only two lanes start, stop and raise concurrency before writing a passing report.

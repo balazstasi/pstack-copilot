@@ -74,6 +74,10 @@ Report only. Name touched files, deletion count, \`MUST KILL\` flags with one li
 for (const family of COPILOT_NATIVE_FAMILIES) {
   for (const effort of EFFORTS) {
     const name = `pstack-${family.stem}-${effort}`;
+    const contextLine =
+      family.contextTier === undefined
+        ? ""
+        : `context-tier: ${family.contextTier}\n`;
     write(
       `${name}.agent.md`,
       `---
@@ -82,7 +86,7 @@ description: Native Copilot lane for pstack roles configured as copilot:${family
 tools: ["read", "search", "execute", "edit", "todo", "web"]
 model: ${family.model}
 reasoning-effort: ${effort}
----
+${contextLine}---
 
 ${LANE_BODY}`
     );

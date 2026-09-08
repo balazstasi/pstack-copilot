@@ -5,6 +5,7 @@ export interface CopilotNativeFamily {
   readonly model: string;
   readonly stem: string;
   readonly defaultEffort: (typeof EFFORTS)[number];
+  readonly contextTier?: "default" | "long_context";
 }
 
 export const COPILOT_NATIVE_FAMILIES: readonly CopilotNativeFamily[] = [
@@ -27,10 +28,11 @@ export const COPILOT_NATIVE_FAMILIES: readonly CopilotNativeFamily[] = [
     defaultEffort: "xhigh",
   },
   {
-    family: "opus48",
-    model: "claude-opus-4.8",
-    stem: "opus48",
-    defaultEffort: "high",
+    family: "opus5",
+    model: "claude-opus-5",
+    stem: "opus5",
+    defaultEffort: "medium",
+    contextTier: "default",
   },
   {
     family: "kimi",

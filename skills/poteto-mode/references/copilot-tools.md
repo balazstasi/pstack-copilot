@@ -27,7 +27,7 @@ Copilot scans every `*.md` and `*.agent.md` in the plugin agents directory. This
 poteto-mode's Subagents section sets Claude-specific defaults (`subagent_type: "poteto-agent"`, `run_in_background: true`). On Copilot:
 
 - Route an ad-hoc subagent through poteto-mode's style by dispatching `pstack:poteto-agent`. That profile reads the `poteto-mode` skill in full first.
-- Pin the lane on a generated `pstack-<stem>-<effort>` agent. Do not pass `model` on `task(...)`.
+- Pin the lane on a generated `pstack-<stem>-<effort>` agent. Do not pass `model` on `task(...)`. Opus 5 lanes pin `context-tier: default` (small window, not `long_context`).
 - The **no-comments** skill spawns `pstack:comment-sicko`. That profile has read and search tools only.
 - Raise `subagents.maxConcurrency` to at least 4 and `subagents.maxDepth` to at least 2 in `~/.copilot/settings.json` before a four-lane panel. Values of 2 and 1 collapse how-critics, arena, architect, and interrogate.
 - Keep the rest of the policy unchanged. Pass file pointers not inlined context. Give each writer its own worktree. Review every subagent's diff yourself.
