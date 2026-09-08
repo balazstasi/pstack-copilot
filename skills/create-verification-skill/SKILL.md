@@ -7,7 +7,7 @@ description: "Generate a project-local verification skill that drives your app t
 
 Every serious project needs a scripted way to drive the real app and prove behavior: launch it, exercise a feature the way a user would, and capture evidence. This skill generates that as a project-local skill (`.claude/skills/verify-<app>/`) tailored to the repo. You write the generator's output for the next agent, not for a human: it will be read cold, mid-task, by an agent that has never seen the app.
 
-**Platform note.** The generated skill lands under `.claude/skills/verify-<app>/` on Claude Code. On Codex or another runtime, write it to that runtime's project-skill location instead. The app-driving harness (browser/CDP, PTY/tmux, HTTP) is platform-neutral; resolve any tool names via [`codex-tools.md`](../poteto-mode/references/codex-tools.md). On Copilot, use [`copilot-tools.md`](../poteto-mode/references/copilot-tools.md).
+**Platform note.** The generated skill lands under `.claude/skills/verify-<app>/` on Claude Code. On Codex or another runtime, write it to that runtime's project-skill location instead. The app-driving harness (browser/CDP, PTY/tmux, HTTP) is platform-neutral; resolve any tool names via [`codex-tools.md`](../poteto-mode/references/codex-tools.md). On Copilot, `view` `${PLUGIN_ROOT}/skills/poteto-mode/references/copilot-tools.md` as an absolute path. Do not `view` `../poteto-mode/references/copilot-tools.md` against the open workspace.
 
 ## 1. Interview the repo, not the user
 

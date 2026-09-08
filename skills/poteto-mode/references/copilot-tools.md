@@ -40,6 +40,31 @@ Claude, Codex, and Grok descriptors use `pstack-runner --parent copilot`. A miss
 
 Keep Why and Reflect on `inherit-parent` or `auto`. The external runner strips the parent's MCP surface.
 
+## Skill path resolution
+
+Copilot `view` resolves paths against the open workspace, not the skill directory. Plugin skills often live outside that workspace. Claude-style relative refs (`playbooks/authoring-a-skill.md`, a bare `SKILL.md`, `../poteto-mode/references/copilot-tools.md`) miss.
+
+Placeholders. Expand each to an absolute filesystem path before every `view` or `execute`. Do not pass the dollar syntax to the tool.
+
+- `SKILL_PATH`. The `Base directory for this skill` line in `<skill-context>`. That is `<plugin-root>/skills/<skill-name>`.
+- `PLUGIN_ROOT`. The directory that contains `plugin.json` and `skills/`. From any pstack skill directory it is two parents up.
+
+Hops.
+
+- This skill's files. `${SKILL_PATH}/<relative>` (playbooks, references, scripts).
+- Another pstack skill. `${PLUGIN_ROOT}/skills/<name>/SKILL.md`.
+- This mapping. `${PLUGIN_ROOT}/skills/poteto-mode/references/copilot-tools.md`.
+
+If skill-context is missing, take the live `pstack` path from `copilot plugin list`. One lookup. Do not `find` the user's home or the open repo.
+
+Never.
+
+- `view` `SKILL.md` or `authoring-a-skill.md` with no directory.
+- Nest sibling skills under `${SKILL_PATH}/skills/`.
+- `~/.agents/skills/` for pstack (do not copy the plugin tree there).
+- `~/.claude/plugins/**/plugin-dev/**`. `plugin-dev:skill-development` is a Claude built-in. Use the table below. Do not search for this skill on disk.
+- The open repo's `.github/skills/` or `.cursor/skills/` for a pstack leaf.
+
 ## Claude built-in skills pstack references
 
 Some triggers name skills that ship with Claude Code, not pstack. They do not exist on Copilot. Substitute the behavior:
@@ -48,7 +73,7 @@ Some triggers name skills that ship with Claude Code, not pstack. They do not ex
 | --- | --- |
 | `run` (drive a CLI/TUI to see a change work) | Run the app yourself via `execute`/`shell` and observe the real output. |
 | `verify` (drive a UI to confirm a fix) | Drive the UI with whatever automation you have, or hand the user a concrete manual check. Do not claim done without observing the artifact. |
-| `plugin-dev:skill-development` | Follow this mapping and the `create-skill` guidance for SKILL.md files. Keep `name` plus `description` frontmatter and progressive disclosure. |
+| `plugin-dev:skill-development` | Do not search for this skill on disk. Follow this mapping and the `create-skill` guidance for SKILL.md files. Keep `name` plus `description` frontmatter and progressive disclosure. |
 | `loop` (recurring/self-paced re-invocation, used by `babysit`) | Dropout. Re-run the step yourself on a cadence. `keepAlive: busy` is not `/loop`. |
 
 ## Vendored scripts

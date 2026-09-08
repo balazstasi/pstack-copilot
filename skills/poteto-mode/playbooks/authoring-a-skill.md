@@ -2,7 +2,7 @@
 
 **You own the skill's voice.** Agent-facing prose has a higher bar than human prose; unhelpful sentences become instructions.
 
-1. Use the **plugin-dev:skill-development** skill (Claude Code's skill for authoring SKILL.md files).
+1. On Claude Code, use the **plugin-dev:skill-development** skill (Claude Code's skill for authoring SKILL.md files). On Copilot, do not search for that skill on disk. Follow `${PLUGIN_ROOT}/skills/poteto-mode/references/copilot-tools.md` and keep `name` plus `description` frontmatter with progressive disclosure.
 2. Validate the skill: frontmatter has `name` and `description`, referenced files exist, cross-skill links resolve.
 3. Test cases if structural; skip if subjective.
 4. Run **Opening a PR**.
