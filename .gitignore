@@ -1,0 +1,8 @@
+.DS_Store
+*.swp
+*.swo
+.vscode/
+node_modules/
+skills/poteto-mode/scripts/node_modules/
+.env
+.env.*
