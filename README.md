@@ -34,7 +34,9 @@ The enabled plugin must load from `/Users/bata02/Projects/pstack-copilot`, not f
 
 ## Latch poteto-mode
 
-Copilot namespaces plugin agents. `--agent poteto-agent` is rejected.
+A `sessionStart` hook injects a short mandate that routes non-trivial work into `/poteto-mode`. Copilot may ask you to trust that hook. The full skill still loads only when invoked.
+
+Copilot namespaces plugin agents. `--agent poteto-agent` is rejected. Latch the full style for the session with:
 
 ```bash
 copilot --agent pstack:poteto-agent
@@ -82,8 +84,9 @@ Copilot first-run defaults:
 ```text
 .
 ├── .github/plugin/marketplace.json   # marketplace name pstack-copilot, source ./
-├── .github/plugin/plugin.json        # plugin name pstack, agents/, skills/
+├── .github/plugin/plugin.json        # plugin name pstack, agents/, skills/, hooks/
 ├── agents/                           # Copilot-only *.agent.md
+├── hooks/                            # sessionStart: injects the poteto-mode mandate
 └── skills/                           # shared pstack skills, including setup-pstack and poteto-mode
 ```
 
@@ -92,6 +95,12 @@ Copilot first-run defaults:
 ```bash
 cd skills/poteto-mode/scripts
 bun test --parallel bootstrap orch watch-pr runner check-plan
+```
+
+From the repo root:
+
+```bash
+bun test hooks/session-start.test.ts
 ```
 
 ## License

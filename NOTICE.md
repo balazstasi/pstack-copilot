@@ -2,7 +2,7 @@
 
 This plugin is a Copilot CLI packaging of MIT-licensed work from [open-pstack](https://github.com/ericlitman/open-pstack) and upstream [cursor/plugins/pstack](https://github.com/cursor/plugins/tree/main/pstack). All upstream copyright notices and license terms are preserved.
 
-The repo root is the plugin. Paths below are relative to that root. Claude-native agent files, Claude hooks, and Claude or Codex plugin manifests are not shipped here.
+The repo root is the plugin. Paths below are relative to that root. Claude-native agent files, Claude hooks, and Claude or Codex plugin manifests are not shipped here. Copilot `sessionStart` lives in `hooks/`.
 
 ## Upstream sources
 
@@ -25,8 +25,9 @@ open-pstack records the full per-skill substitution audit in its `CHANGES.md` an
 
 - Marketplace name is `pstack-copilot`. Plugin name is `pstack`. Source is `./`.
 - Copilot agents live in `agents/` as `*.agent.md`. Claude `agents/*.md` files are omitted on purpose.
+- A Copilot `sessionStart` hook injects the poteto-mode routing mandate as `additionalContext`. It does not load the full skill.
 - `/setup-pstack` writes `~/.copilot/pstack-models.md` and a bounded include in `~/.copilot/copilot-instructions.md`.
 
 ## Modifications
 
-Skill bodies keep the open-pstack substitutions of Cursor primitives. Copilot tool names are documented in `skills/poteto-mode/references/copilot-tools.md`. Agent files and the Copilot marketplace manifests are authored for this packaging.
+Skill bodies keep the open-pstack substitutions of Cursor primitives. Copilot tool names are documented in `skills/poteto-mode/references/copilot-tools.md`. Agent files, the Copilot marketplace manifests, and the Copilot `sessionStart` hook are authored for this packaging.

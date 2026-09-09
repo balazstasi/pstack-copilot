@@ -82,7 +82,7 @@ Some triggers name skills that ship with Claude Code, not pstack. They do not ex
 
 ## Session identity
 
-Sticky `/poteto-mode` across turns does not exist. Latch the session with `copilot --agent pstack:poteto-agent` or `/agent`. Skills stay on-demand.
+A `sessionStart` plugin hook injects the poteto-mode routing mandate as `additionalContext`. It does not load the full skill. Sticky `/poteto-mode` across turns does not exist. Latch the session with `copilot --agent pstack:poteto-agent` or `/agent` when you want the full style for the whole session. Skills stay on-demand otherwise.
 
 ## Instructions file
 

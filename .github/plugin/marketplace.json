@@ -26,7 +26,8 @@
         "unslop"
       ],
       "agents": "agents/",
-      "skills": "skills/"
+      "skills": "skills/",
+      "hooks": "hooks/copilot-hooks.json"
     }
   ]
 }
