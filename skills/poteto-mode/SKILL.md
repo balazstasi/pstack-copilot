@@ -9,7 +9,7 @@ description: poteto's agent style for concise, detailed responses, deliberate su
 
 These skills share one tree across Claude Code, Codex, and Copilot. Read [`references/provider-dispatch.md`](references/provider-dispatch.md) whenever a configured role launches. It defines the provider-qualified model descriptors, native/external route table, launcher, isolation, receipts, and dropout policy. Children never choose routes. When a skill names a Claude tool or built-in skill (`run`, `verify`, `plugin-dev:skill-development`), read [`references/codex-tools.md`](references/codex-tools.md) on Codex and [`references/copilot-tools.md`](references/copilot-tools.md) on Copilot.
 
-On Copilot, resolve every file hop per `references/copilot-tools.md` (Skill path resolution) before any `view`. `SKILL_PATH` is this skill's directory. `PLUGIN_ROOT` is the plugin root. Expand both to absolute paths. A leaf named `principle-*` or any other pstack skill is `${PLUGIN_ROOT}/skills/<name>/SKILL.md`. A playbook `playbooks/<file>.md` is `${SKILL_PATH}/playbooks/<file>.md`. Never `view` a bare filename.
+On Copilot, resolve every file hop per `references/copilot-tools.md` (Skill path resolution) before any `view`. `SKILL_PATH` is this skill's directory. `PLUGIN_ROOT` is the plugin root. Expand both to absolute paths. Load a leaf named `principle-*` or any other pstack skill with the `skill` tool by name (`skill: principle-laziness-protocol`). Never `view` `SKILL.md`. A playbook `playbooks/<file>.md` is `${SKILL_PATH}/playbooks/<file>.md` as an absolute path. Never `view` a bare filename.
 
 ## Non-negotiables
 

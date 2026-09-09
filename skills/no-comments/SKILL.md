@@ -9,7 +9,7 @@ Spawn comment-sicko. Act on accepted findings.
 
 Authoring agents defend comments. Defer to comment-sicko's fresh perspective.
 
-**Platform note.** On Codex or another non-Claude runtime, the `comment-sicko` subagent and the Claude tool names below are Claude defaults. Resolve them via [`codex-tools.md`](../poteto-mode/references/codex-tools.md). On Copilot, resolve them via [`copilot-tools.md`](../poteto-mode/references/copilot-tools.md) and spawn `pstack:comment-sicko`.
+**Platform note.** On Codex or another non-Claude runtime, the `comment-sicko` subagent and the Claude tool names below are Claude defaults. Resolve them via [`codex-tools.md`](../poteto-mode/references/codex-tools.md). On Copilot, resolve them via [`copilot-tools.md`](../poteto-mode/references/copilot-tools.md) and spawn `comment-sicko` on `task()`.
 
 ## Scope
 

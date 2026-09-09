@@ -342,7 +342,9 @@ describe("model matrix", () => {
       join(PLUGIN_ROOT, "skills/poteto-mode/references/copilot-tools.md"),
       "utf8"
     );
-    expect(tools).toContain("`agent_type: pstack:pstack-<stem>`");
+    expect(tools).toContain("`agent_type: pstack-<stem>`");
+    expect(tools).toContain("--agent pstack:pstack-<stem>");
+    expect(tools).toContain("`agent_type: comment-sicko`");
     expect(tools).not.toContain("pstack-<stem>-<effort>");
     expect(tools).not.toContain("3565");
     expect(
@@ -401,7 +403,8 @@ describe("model matrix", () => {
     const sicko = parseFrontmatter(
       readFileSync(join(AGENTS_DIR, "comment-sicko.agent.md"), "utf8")
     );
-    expect(sicko.fields.model).toBeUndefined();
+    expect(sicko.fields.model).toBe("gpt-5.6-luna");
+    expect(sicko.fields["reasoning-effort"]).toBe("xhigh");
     const shipped = readdirSync(AGENTS_DIR)
       .filter((name) => name.endsWith(".agent.md"))
       .sort();

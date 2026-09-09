@@ -68,18 +68,21 @@ describe("copilot skill path anchors", () => {
   it("anchors Copilot hops so View cannot use a bare SKILL.md", () => {
     expect(tools).toContain("## Skill path resolution");
     expect(tools).toContain("${PLUGIN_ROOT}/skills/<name>/SKILL.md");
+    expect(tools).toContain("`skill` tool by name");
+    expect(tools).toContain("Do not `view` `${PLUGIN_ROOT}/skills/<name>/SKILL.md`");
     expect(tools).toContain("~/.agents/skills/");
     expect(tools).toContain("Do not search for this skill on disk");
-    expect(poteto).toContain("${PLUGIN_ROOT}/skills/<name>/SKILL.md");
+    expect(tools).toContain("Never pass `pstack:comment-sicko` to `task()`");
+    expect(poteto).toContain("skill: principle-laziness-protocol");
+    expect(poteto).toContain("Never `view` `SKILL.md`");
     expect(poteto).toContain("${SKILL_PATH}/playbooks/<file>.md");
     expect(authoring).toContain("do not search for that skill on disk");
     expect(create).toContain(
       "${PLUGIN_ROOT}/skills/poteto-mode/references/copilot-tools.md",
     );
-    expect(agent).toContain("${PLUGIN_ROOT}/skills/poteto-mode/SKILL.md");
+    expect(agent).toContain("skill: poteto-mode");
+    expect(agent).toContain("Never View a path that ends in SKILL.md");
     expect(agent).toContain("Never View a bare filename");
-    expect(generator).toContain(
-      "PLUGIN_ROOT}/skills/poteto-mode/SKILL.md",
-    );
+    expect(generator).toContain("Never View a path that ends in SKILL.md");
   });
 });

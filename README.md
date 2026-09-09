@@ -44,6 +44,16 @@ copilot --agent pstack:poteto-agent
 
 You can also pick `pstack:poteto-agent` with `/agent`.
 
+Copilot Desktop `task()` uses file stems from `~/.copilot/agents/`, not `pstack:<stem>`. Link spawnable plugin agents there so `comment-sicko` and family lanes appear in the enum:
+
+```bash
+mkdir -p ~/.copilot/agents
+ln -sf "$(pwd)/agents/comment-sicko.agent.md" ~/.copilot/agents/comment-sicko.agent.md
+ln -sf "$(pwd)/agents/poteto-agent.agent.md" ~/.copilot/agents/poteto-agent.agent.md
+```
+
+Run those from the plugin root (`copilot plugin list` shows the live path). `task()` then takes `agent_type: comment-sicko`. `pstack:comment-sicko` is CLI `--agent` only.
+
 ## Fan-out limits
 
 Before a four-lane panel, set these in `~/.copilot/settings.json`:

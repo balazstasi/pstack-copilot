@@ -31,16 +31,13 @@ model: gpt-5.6-terra
 reasoning-effort: high
 ---
 
-You are operating as poteto-mode's full agent style. Read
-\`\${PLUGIN_ROOT}/skills/poteto-mode/SKILL.md\` and
-\`\${PLUGIN_ROOT}/skills/poteto-mode/references/copilot-tools.md\` before any
-work, including the Principles index.
+You are operating as poteto-mode's full agent style. Call the skill tool
+with skill: poteto-mode before any work, including the Principles index.
+Then View copilot-tools.md from that skill-context Base directory as an
+absolute path. Follow its Skill path resolution and Subagent policy.
 
-PLUGIN_ROOT is the pstack plugin root from skill-context (parent of
-\`skills/\`), or the live path from \`copilot plugin list\`. Expand placeholders
-to absolute paths before View. Leaf skills are
-\`\${PLUGIN_ROOT}/skills/<name>/SKILL.md\`. Playbooks are
-\`\${PLUGIN_ROOT}/skills/poteto-mode/playbooks/<file>.md\`.
+Never View a path that ends in SKILL.md. Load every other pstack skill with
+the skill tool by name. Playbooks are <Base directory>/playbooks/<file>.md.
 Never View a bare filename. Never search \`~/.agents/skills\` or the workspace
 for pstack skills.
 `
@@ -52,6 +49,8 @@ write(
 name: comment-sicko
 description: A deranged comment-hater that savors deletion and condemns workaround code.
 tools: ["read", "search"]
+model: gpt-5.6-luna
+reasoning-effort: xhigh
 ---
 
 # Comment Sicko

@@ -9,16 +9,16 @@ pstack skills retain Claude Code tool language (`Skill`, `Agent`, `AskUserQuesti
 | Skill / slash command | Loaded plugin skills. Invoke by name (`/poteto-mode`, `/setup-pstack`). |
 | Agent / Task | `agent` / `task` with `agent_type` |
 | Per-call `model:` | Valid on `task()`. Native family lanes still pin `model` plus `reasoning-effort` on `pstack-<stem>` because `task()` has no spawn-time effort. |
-| `subagent_type: poteto-agent` | `agent_type: pstack:poteto-agent` |
-| `subagent_type: comment-sicko` | `agent_type: pstack:comment-sicko` |
-| Native family lane `pstack-<stem>` | `agent_type: pstack:pstack-<stem>` |
+| `subagent_type: poteto-agent` | `task()` `agent_type: poteto-agent`. CLI `--agent pstack:poteto-agent`. |
+| `subagent_type: comment-sicko` | `task()` `agent_type: comment-sicko`. CLI `--agent pstack:comment-sicko`. |
+| Native family lane `pstack-<stem>` | `task()` `agent_type: pstack-<stem>`. CLI `--agent pstack:pstack-<stem>`. |
 | AskUserQuestion | `ask_user`. Weaker structured choice. Prototype instead of asking when the playbook already says to. |
 | `run_in_background` | `task` background mode when present. Otherwise dispatch and keep the task handle. |
 | `environment: cloud` | Dropout. Local worktree only. |
 | `/loop` | Dropout. `keepAlive: busy` only keeps the session alive. |
 | Instructions file | `~/.copilot/copilot-instructions.md` plus the project `AGENTS.md` if present. |
 
-Plugin custom agents are namespaced as `pstack:<file-stem>`. `--agent poteto-agent` is rejected. Use `--agent pstack:poteto-agent` or `/agent` and pick that id.
+CLI `--agent` and `/agent` use the plugin-namespaced id `pstack:<file-stem>`. `--agent poteto-agent` is rejected. Copilot Desktop `task()` does not accept those namespaced ids. Its `agent_type` enum is the file stem (`poteto-agent`, `comment-sicko`, `pstack-terra`). Spawn that stem. If the stem is missing from the enum, link `agents/<stem>.agent.md` from the plugin root into `~/.copilot/agents/` and retry. Never pass `pstack:comment-sicko` to `task()`.
 
 Copilot scans every `*.md` and `*.agent.md` in the plugin agents directory. This Copilot-only plugin keeps those files under `agents/` as `*.agent.md`. Do not copy Claude `agents/*.md` files here.
 
@@ -26,9 +26,9 @@ Copilot scans every `*.md` and `*.agent.md` in the plugin agents directory. This
 
 poteto-mode's Subagents section sets Claude-specific defaults (`subagent_type: "poteto-agent"`, `run_in_background: true`). On Copilot:
 
-- Route an ad-hoc subagent through poteto-mode's style by dispatching `pstack:poteto-agent`. That profile reads the `poteto-mode` skill in full first.
-- Dispatch a native family lane as `pstack:pstack-<stem>`. That file pins `model` and `reasoning-effort` at the family's default. Opus 5 also pins `context-tier: default` (small window, not `long_context`).
-- The **no-comments** skill spawns `pstack:comment-sicko`. That profile has read and search tools only.
+- Route an ad-hoc subagent through poteto-mode's style by dispatching `poteto-agent`. That profile loads `poteto-mode` with the skill tool first. CLI `--agent` still uses `pstack:poteto-agent`.
+- Dispatch a native family lane as `pstack-<stem>`. That file pins `model` and `reasoning-effort` at the family's default. Opus 5 also pins `context-tier: default` (small window, not `long_context`). CLI `--agent` still uses `pstack:pstack-<stem>`.
+- The **no-comments** skill spawns `comment-sicko`. That profile pins `gpt-5.6-luna` at xhigh effort and has read and search tools only. Do not omit `model` on `task()` if a hook require-list would treat an unset model as a deny. The agent file already pins it, so spawn-time `model` is optional.
 - Raise `subagents.maxConcurrency` to at least 4 and `subagents.maxDepth` to at least 2 in `~/.copilot/settings.json` before a four-lane panel. Values of 2 and 1 collapse how-critics, arena, architect, and interrogate.
 - Keep the rest of the policy unchanged. Pass file pointers not inlined context. Give each writer its own worktree. Review every subagent's diff yourself.
 
@@ -42,7 +42,9 @@ Keep Why and Reflect on `inherit-parent` or `auto`. The external runner strips t
 
 ## Skill path resolution
 
-Copilot `view` resolves paths against the open workspace, not the skill directory. Plugin skills often live outside that workspace. Claude-style relative refs (`playbooks/authoring-a-skill.md`, a bare `SKILL.md`, `../poteto-mode/references/copilot-tools.md`) miss.
+Copilot `view` resolves paths against the open workspace, not the skill directory. Plugin skills often live outside that workspace. Claude-style relative refs (`playbooks/authoring-a-skill.md`, a bare `SKILL.md`, `../poteto-mode/references/copilot-tools.md`) miss. A `view` of `SKILL.md` fails immediately.
+
+Load another pstack skill with the `skill` tool by name (`skill: no-comments`, `skill: principle-prove-it-works`). Do not `view` `${PLUGIN_ROOT}/skills/<name>/SKILL.md`. The skill tool injects that file.
 
 Placeholders. Expand each to an absolute filesystem path before every `view` or `execute`. Do not pass the dollar syntax to the tool.
 
@@ -52,14 +54,14 @@ Placeholders. Expand each to an absolute filesystem path before every `view` or 
 Hops.
 
 - This skill's files. `${SKILL_PATH}/<relative>` (playbooks, references, scripts).
-- Another pstack skill. `${PLUGIN_ROOT}/skills/<name>/SKILL.md`.
+- Another pstack skill. `skill: <name>`. Not a `view`.
 - This mapping. `${PLUGIN_ROOT}/skills/poteto-mode/references/copilot-tools.md`.
 
 If skill-context is missing, take the live `pstack` path from `copilot plugin list`. One lookup. Do not `find` the user's home or the open repo.
 
 Never.
 
-- `view` `SKILL.md` or `authoring-a-skill.md` with no directory.
+- `view` `SKILL.md`, a path that ends in `SKILL.md`, or `authoring-a-skill.md` with no directory.
 - Nest sibling skills under `${SKILL_PATH}/skills/`.
 - `~/.agents/skills/` for pstack (do not copy the plugin tree there).
 - `~/.claude/plugins/**/plugin-dev/**`. `plugin-dev:skill-development` is a Claude built-in. Use the table below. Do not search for this skill on disk.
