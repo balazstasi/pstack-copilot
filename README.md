@@ -71,8 +71,10 @@ Setup writes `~/.copilot/pstack-models.md` and a bounded `<!-- pstack:models:beg
 
 Copilot first-run defaults:
 
-- feature / refactoring / how explorer / swarm workers → `copilot:gpt-5.6-luna@xhigh`
-- judgment / hardest / how explainer → `copilot:gpt-5.6-terra@high`
+- feature / refactoring / how explorer → `copilot:gpt-5.6-luna@xhigh`
+- swarm workers → `copilot:gpt-6-astra@low`
+- judgment and prose → `copilot:claude-opus-5@medium`
+- hardest / how explainer → `copilot:gpt-5.6-terra@high`
 - bug-fix / perf / hillclimb → `copilot:gpt-5.6-sol@medium`
 - panels → terra, sol, `inherit-parent`, `copilot:kimi-k3@high`
 - why / reflect → `inherit-parent`

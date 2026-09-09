@@ -1,7 +1,7 @@
 #!/usr/bin/env bun
-import { mkdirSync, writeFileSync } from "node:fs";
+import { mkdirSync, readdirSync, unlinkSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
-import { COPILOT_NATIVE_FAMILIES, EFFORTS } from "./copilot-agents.ts";
+import { COPILOT_NATIVE_FAMILIES } from "./copilot-agents.ts";
 
 const OUT_DIR = join(import.meta.dir, "../../../../agents");
 
@@ -15,6 +15,11 @@ function write(relPath: string, contents: string): void {
   mkdirSync(dirname(path), { recursive: true });
   writeFileSync(path, contents, "utf8");
 }
+
+const shipped = new Set<string>([
+  "poteto-agent.agent.md",
+  "comment-sicko.agent.md",
+]);
 
 write(
   "poteto-agent.agent.md",
@@ -80,25 +85,29 @@ Report only. Name touched files, deletion count, \`MUST KILL\` flags with one li
 );
 
 for (const family of COPILOT_NATIVE_FAMILIES) {
-  for (const effort of EFFORTS) {
-    const name = `pstack-${family.stem}-${effort}`;
-    const contextLine =
-      family.contextTier === undefined
-        ? ""
-        : `context-tier: ${family.contextTier}\n`;
-    write(
-      `${name}.agent.md`,
-      `---
+  const name = `pstack-${family.stem}`;
+  shipped.add(`${name}.agent.md`);
+  const contextLine =
+    family.contextTier === undefined
+      ? ""
+      : `context-tier: ${family.contextTier}\n`;
+  write(
+    `${name}.agent.md`,
+    `---
 name: ${name}
-description: Native Copilot lane for pstack roles configured as copilot:${family.model}@${effort}.
+description: Native Copilot lane for pstack roles configured as copilot:${family.model}@${family.defaultEffort}.
 tools: ["read", "search", "execute", "edit", "todo", "web"]
 model: ${family.model}
-reasoning-effort: ${effort}
+reasoning-effort: ${family.defaultEffort}
 ${contextLine}---
 
 ${LANE_BODY}`
-    );
-  }
+  );
+}
+
+for (const name of readdirSync(OUT_DIR)) {
+  if (!name.endsWith(".agent.md") || shipped.has(name)) continue;
+  unlinkSync(join(OUT_DIR, name));
 }
 
 console.log(`wrote Copilot agents to ${OUT_DIR}`);

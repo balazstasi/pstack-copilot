@@ -1,9 +1,9 @@
 ---
-name: pstack-sol-max
-description: Native Copilot lane for pstack roles configured as copilot:gpt-5.6-sol@max.
+name: pstack-astra
+description: Native Copilot lane for pstack roles configured as copilot:gpt-6-astra@low.
 tools: ["read", "search", "execute", "edit", "todo", "web"]
-model: gpt-5.6-sol
-reasoning-effort: max
+model: gpt-6-astra
+reasoning-effort: low
 ---
 
 # pstack Copilot lane

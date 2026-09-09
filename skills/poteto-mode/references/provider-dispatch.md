@@ -25,13 +25,14 @@ These rows are native only on a Copilot parent. They are not silent stand-ins fo
 
 | Family | Descriptor model | Provider | Default effort | Selectable efforts | Copilot-native agent stem |
 |---|---|---|---|---|---|
-| terra | gpt-5.6-terra | copilot | high | low medium high xhigh max | terra |
-| copilot-sol | gpt-5.6-sol | copilot | medium | low medium high xhigh max | sol |
-| luna | gpt-5.6-luna | copilot | xhigh | low medium high xhigh max | luna |
-| opus5 | claude-opus-5 | copilot | medium | low medium high xhigh max | opus5 |
-| kimi | kimi-k3 | copilot | high | low medium high xhigh max | kimi |
+| terra | gpt-5.6-terra | copilot | high | high | terra |
+| copilot-sol | gpt-5.6-sol | copilot | medium | medium | sol |
+| luna | gpt-5.6-luna | copilot | xhigh | xhigh | luna |
+| opus5 | claude-opus-5 | copilot | medium | medium | opus5 |
+| kimi | kimi-k3 | copilot | high | high | kimi |
+| astra | gpt-6-astra | copilot | low | low | astra |
 
-The shipped Copilot agent name is `pstack-<stem>-<effort>` under `agents/`. This Copilot-only plugin keeps Claude `agents/*.md` files out of that directory. Copilot loads every `*.md` and `*.agent.md` in its agents path. Opus 5 lanes pin `context-tier: default` (the small window). Do not use `claude-opus-5-1m`, `claude-opus-5[1m]`, or `long_context`.
+The shipped Copilot agent name is `pstack-<stem>` under `agents/`. Each file pins `model` and that family's only `reasoning-effort`. Copilot `task()` has no spawn-time effort, so the sheet cannot pick a second effort for a family. This Copilot-only plugin keeps Claude `agents/*.md` files out of that directory. Copilot loads every `*.md` and `*.agent.md` in its agents path. Opus 5 lanes pin `context-tier: default` (the small window). Do not use `claude-opus-5-1m`, `claude-opus-5[1m]`, or `long_context`.
 
 ## Read-time normalization
 
@@ -49,7 +50,7 @@ The top-level harness resolves the route once. A child receives an assigned prov
 |---|---|---|---|---|
 | Claude Code | native `Agent` | external runner | external runner | n/a |
 | Codex | external runner | native `spawn_agent` | external runner | n/a |
-| Copilot CLI | external runner | external runner | external runner | native `pstack-<stem>-<effort>` |
+| Copilot CLI | external runner | external runner | external runner | native `pstack-<stem>` |
 
 `inherit-parent` and `auto` remain aliases. They use the parent's current model and effort through its native subagent primitive. In a panel they still consume one lane, but they reduce provider diversity; say so in the synthesis record.
 
@@ -59,7 +60,7 @@ Native dispatch avoids a second CLI startup and its base context.
 
 - Claude Code: match the descriptor's `(provider, model)` to one model-matrix row, then dispatch it through `pstack-<stem>-<effort>` using that row's Claude-native agent stem and the descriptor's effort. Those definitions select the rolling model alias, requested effort, and `background: true`. `pstack-fable-max` and `pstack-opus-xhigh` remain in that set. Pass the complete task, grounding paths, access mode, and unique output location in the `Agent` prompt. Retain the task handle and drain it only after fan-out.
 - Codex: call `spawn_agent` with the descriptor's model and `reasoning_effort`, the complete task, grounding paths, access mode, and unique output location. Use an isolated worktree for a writer. Codex subagents already run concurrently.
-- Copilot CLI: match a `copilot:*` descriptor to one Copilot-native family row, then dispatch `pstack:<file-stem>` for `pstack-<stem>-<effort>`. The agent file pins `model` and `reasoning-effort`. Opus 5 also pins `context-tier: default`. Do not pass a spawn-time `model` on `task(...)`. GitHub Copilot CLI issue 3565 can silently downgrade that argument to the parent session model. `pstack:poteto-agent` and `pstack:comment-sicko` are not family lanes. Use an isolated worktree for a writer.
+- Copilot CLI: match a `copilot:*` descriptor to one Copilot-native family row, then dispatch `pstack:pstack-<stem>`. The agent file pins `model` and the family's default `reasoning-effort`. Opus 5 also pins `context-tier: default`. Spawn-time `model` on `task()` is valid, but unused here. Do not pass spawn-time effort. `pstack:poteto-agent` and `pstack:comment-sicko` are not family lanes. Use an isolated worktree for a writer.
 
 Do not send a same-provider descriptor to the external runner. It rejects that call because the native route is cheaper and already available.
 

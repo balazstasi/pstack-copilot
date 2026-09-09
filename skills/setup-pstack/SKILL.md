@@ -132,15 +132,15 @@ Use this section when step 1 recorded Copilot CLI. Keep Why and Reflect on `inhe
 
 ### Copilot efforts and probes
 
-Ask one effort question per Copilot-native family: terra, copilot-sol, luna, opus5, kimi. Name each model, its current or proposed value, and the Selectable efforts from the Copilot-native table. Empty input keeps a current value or accepts that row's Default effort.
+Use each Copilot-native family's default effort. That is also its only selectable effort. The agent file pins it. Do not ask for a second effort.
 
-Probe only those selected `copilot:model@effort` pairs. Each probe is a one-turn native `task` to `pstack:pstack-<stem>-<effort>`. The child must report the configured model. A silent downgrade to the parent session model is a failed probe. A failed probe writes nothing.
+Probe those `copilot:model@effort` pairs. Each probe is a one-turn native `task` to `pstack:pstack-<stem>`. The child must report the configured model. A silent downgrade to the parent session model is a failed probe. A failed probe writes nothing.
 
 Optional CLI families (claude, codex, grok) are extra lanes. Probe them with `pstack-runner --parent copilot` only if the operator asks and the CLI authenticates. They are not the daily default. Never substitute a missing CLI with a Copilot-native family.
 
 ### Copilot first-run sheet
 
-This fence is only the Copilot first-run role map. Selected efforts and explicit role changes replace its example values before writing.
+This fence is only the Copilot first-run role map. Copilot family efforts stay on the pinned defaults. Explicit role-to-family changes replace example values before writing.
 
 ```markdown
 # pstack model configuration (Copilot parent)
@@ -151,7 +151,7 @@ feature, refactoring: copilot:gpt-5.6-luna@xhigh
 bug-fix: copilot:gpt-5.6-sol@medium
 perf-issue: copilot:gpt-5.6-sol@medium
 hillclimb: copilot:gpt-5.6-sol@medium
-judgment and prose: copilot:gpt-5.6-terra@high
+judgment and prose: copilot:claude-opus-5@medium
 hardest tasks: copilot:gpt-5.6-terra@high
 how explorer: copilot:gpt-5.6-luna@xhigh
 how explainer: copilot:gpt-5.6-terra@high
@@ -160,7 +160,7 @@ why investigators, synthesizer: inherit-parent
 reflect tooling, judgment, divergent, synthesizer: inherit-parent
 arena runners: copilot:gpt-5.6-terra@high, copilot:gpt-5.6-sol@medium, inherit-parent, copilot:kimi-k3@high
 arena cross-judge pool: copilot:gpt-5.6-terra@high, copilot:gpt-5.6-sol@medium, inherit-parent, copilot:kimi-k3@high
-swarm workers: copilot:gpt-5.6-luna@xhigh
+swarm workers: copilot:gpt-6-astra@low
 architect runners: copilot:gpt-5.6-terra@high, copilot:gpt-5.6-sol@medium, inherit-parent, copilot:kimi-k3@high
 interrogate reviewers: copilot:gpt-5.6-terra@high, copilot:gpt-5.6-sol@medium, inherit-parent, copilot:kimi-k3@high
 ```

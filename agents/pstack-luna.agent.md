@@ -1,9 +1,9 @@
 ---
-name: pstack-sol-high
-description: Native Copilot lane for pstack roles configured as copilot:gpt-5.6-sol@high.
+name: pstack-luna
+description: Native Copilot lane for pstack roles configured as copilot:gpt-5.6-luna@xhigh.
 tools: ["read", "search", "execute", "edit", "todo", "web"]
-model: gpt-5.6-sol
-reasoning-effort: high
+model: gpt-5.6-luna
+reasoning-effort: xhigh
 ---
 
 # pstack Copilot lane

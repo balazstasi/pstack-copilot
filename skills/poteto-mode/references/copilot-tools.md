@@ -8,10 +8,10 @@ pstack skills retain Claude Code tool language (`Skill`, `Agent`, `AskUserQuesti
 | --- | --- |
 | Skill / slash command | Loaded plugin skills. Invoke by name (`/poteto-mode`, `/setup-pstack`). |
 | Agent / Task | `agent` / `task` with `agent_type` |
-| Per-call `model:` | Do not trust. GitHub Copilot CLI issue 3565 can silently downgrade a spawn-time model to the parent session model. Pin the model on a `*.agent.md` profile. |
+| Per-call `model:` | Valid on `task()`. Native family lanes still pin `model` plus `reasoning-effort` on `pstack-<stem>` because `task()` has no spawn-time effort. |
 | `subagent_type: poteto-agent` | `agent_type: pstack:poteto-agent` |
 | `subagent_type: comment-sicko` | `agent_type: pstack:comment-sicko` |
-| Native family lane `pstack-<stem>-<effort>` | `agent_type: pstack:pstack-<stem>-<effort>` |
+| Native family lane `pstack-<stem>` | `agent_type: pstack:pstack-<stem>` |
 | AskUserQuestion | `ask_user`. Weaker structured choice. Prototype instead of asking when the playbook already says to. |
 | `run_in_background` | `task` background mode when present. Otherwise dispatch and keep the task handle. |
 | `environment: cloud` | Dropout. Local worktree only. |
@@ -27,7 +27,7 @@ Copilot scans every `*.md` and `*.agent.md` in the plugin agents directory. This
 poteto-mode's Subagents section sets Claude-specific defaults (`subagent_type: "poteto-agent"`, `run_in_background: true`). On Copilot:
 
 - Route an ad-hoc subagent through poteto-mode's style by dispatching `pstack:poteto-agent`. That profile reads the `poteto-mode` skill in full first.
-- Pin the lane on a generated `pstack-<stem>-<effort>` agent. Do not pass `model` on `task(...)`. Opus 5 lanes pin `context-tier: default` (small window, not `long_context`).
+- Dispatch a native family lane as `pstack:pstack-<stem>`. That file pins `model` and `reasoning-effort` at the family's default. Opus 5 also pins `context-tier: default` (small window, not `long_context`).
 - The **no-comments** skill spawns `pstack:comment-sicko`. That profile has read and search tools only.
 - Raise `subagents.maxConcurrency` to at least 4 and `subagents.maxDepth` to at least 2 in `~/.copilot/settings.json` before a four-lane panel. Values of 2 and 1 collapse how-critics, arena, architect, and interrogate.
 - Keep the rest of the policy unchanged. Pass file pointers not inlined context. Give each writer its own worktree. Review every subagent's diff yourself.

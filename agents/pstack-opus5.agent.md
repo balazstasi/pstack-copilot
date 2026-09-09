@@ -1,9 +1,10 @@
 ---
-name: pstack-kimi-low
-description: Native Copilot lane for pstack roles configured as copilot:kimi-k3@low.
+name: pstack-opus5
+description: Native Copilot lane for pstack roles configured as copilot:claude-opus-5@medium.
 tools: ["read", "search", "execute", "edit", "todo", "web"]
-model: kimi-k3
-reasoning-effort: low
+model: claude-opus-5
+reasoning-effort: medium
+context-tier: default
 ---
 
 # pstack Copilot lane

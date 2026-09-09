@@ -308,6 +308,8 @@ describe("model matrix", () => {
       "match the descriptor's `(provider, model)` to one model-matrix row"
     );
     expect(nativeLanes).toContain("`pstack-<stem>-<effort>`");
+    expect(nativeLanes).toContain("`pstack:pstack-<stem>`");
+    expect(nativeLanes).not.toContain("issue 3565");
   });
 
   it("normalizes old rolling-family pins before any runtime route", () => {
@@ -329,34 +331,84 @@ describe("model matrix", () => {
     expect(dispatch).toContain("## Copilot-native families");
     expect(dispatch).toContain("`copilot:*`");
     expect(dispatch).toContain("--parent <claude|codex|copilot>");
+    expect(dispatch).toContain(
+      "| astra | gpt-6-astra | copilot | low | low | astra |"
+    );
+    expect(dispatch).toContain(
+      "| luna | gpt-5.6-luna | copilot | xhigh | xhigh | luna |"
+    );
+    expect(dispatch).not.toContain("3565");
+    const tools = readFileSync(
+      join(PLUGIN_ROOT, "skills/poteto-mode/references/copilot-tools.md"),
+      "utf8"
+    );
+    expect(tools).toContain("`agent_type: pstack:pstack-<stem>`");
+    expect(tools).not.toContain("pstack-<stem>-<effort>");
+    expect(tools).not.toContain("3565");
+    expect(
+      COPILOT_NATIVE_FAMILIES.map((family) => [
+        family.family,
+        family.model,
+        family.stem,
+        family.defaultEffort,
+        [...family.selectableEfforts],
+        family.contextTier ?? null,
+      ])
+    ).toEqual([
+      ["terra", "gpt-5.6-terra", "terra", "high", ["high"], null],
+      ["copilot-sol", "gpt-5.6-sol", "sol", "medium", ["medium"], null],
+      ["luna", "gpt-5.6-luna", "luna", "xhigh", ["xhigh"], null],
+      [
+        "opus5",
+        "claude-opus-5",
+        "opus5",
+        "medium",
+        ["medium"],
+        "default",
+      ],
+      ["kimi", "kimi-k3", "kimi", "high", ["high"], null],
+      ["astra", "gpt-6-astra", "astra", "low", ["low"], null],
+    ]);
     const expected = new Set<string>([
       "poteto-agent.agent.md",
       "comment-sicko.agent.md",
     ]);
     for (const family of COPILOT_NATIVE_FAMILIES) {
-      for (const effort of EFFORTS) {
-        const name = `pstack-${family.stem}-${effort}`;
-        expected.add(`${name}.agent.md`);
-        const text = readFileSync(join(AGENTS_DIR, `${name}.agent.md`), "utf8");
-        const { fields } = parseFrontmatter(text);
-        expect(fields.name).toBe(name);
-        expect(fields.model).toBe(family.model);
-        expect(fields.model).not.toMatch(/1m/i);
-        expect(fields["reasoning-effort"]).toBe(effort);
-        expect(fields.tools).toBe(
-          '["read", "search", "execute", "edit", "todo", "web"]'
-        );
-        if (family.contextTier === undefined) {
-          expect(fields["context-tier"]).toBeUndefined();
-        } else {
-          expect(fields["context-tier"]).toBe(family.contextTier);
-        }
+      const name = `pstack-${family.stem}`;
+      expected.add(`${name}.agent.md`);
+      expect([...family.selectableEfforts]).toEqual([family.defaultEffort]);
+      expect(name).not.toMatch(/-(low|medium|high|xhigh|max)$/);
+      const text = readFileSync(join(AGENTS_DIR, `${name}.agent.md`), "utf8");
+      const { fields } = parseFrontmatter(text);
+      expect(fields.name).toBe(name);
+      expect(fields.model).toBe(family.model);
+      expect(fields.model).not.toMatch(/1m/i);
+      expect(fields["reasoning-effort"]).toBe(family.defaultEffort);
+      expect(fields.tools).toBe(
+        '["read", "search", "execute", "edit", "todo", "web"]'
+      );
+      if (family.contextTier === undefined) {
+        expect(fields["context-tier"]).toBeUndefined();
+      } else {
+        expect(fields["context-tier"]).toBe(family.contextTier);
       }
     }
+    const poteto = parseFrontmatter(
+      readFileSync(join(AGENTS_DIR, "poteto-agent.agent.md"), "utf8")
+    );
+    expect(poteto.fields.model).toBe("gpt-5.6-terra");
+    expect(poteto.fields["reasoning-effort"]).toBe("high");
+    const sicko = parseFrontmatter(
+      readFileSync(join(AGENTS_DIR, "comment-sicko.agent.md"), "utf8")
+    );
+    expect(sicko.fields.model).toBeUndefined();
     const shipped = readdirSync(AGENTS_DIR)
       .filter((name) => name.endsWith(".agent.md"))
       .sort();
     expect(shipped).toEqual([...expected].sort());
+    expect(shipped.some((name) => /-(low|medium|high|xhigh|max)\.agent\.md$/.test(name))).toBe(
+      false
+    );
   });
 
   it("keeps setup's Copilot first-run sheet on Copilot-native descriptors", () => {
@@ -367,16 +419,22 @@ describe("model matrix", () => {
       throw new Error("setup-pstack is missing the Copilot first-run sheet fence");
     }
     const sheet = match[1];
-    expect(sheet).toContain("copilot:gpt-5.6-luna@xhigh");
-    expect(sheet).toContain("copilot:gpt-5.6-sol@medium");
-    expect(sheet).toContain("copilot:gpt-5.6-terra@high");
+    for (const family of COPILOT_NATIVE_FAMILIES) {
+      expect(sheet).toContain(
+        `copilot:${family.model}@${family.defaultEffort}`
+      );
+    }
     expect(sheet).toContain(
       "copilot:gpt-5.6-terra@high, copilot:gpt-5.6-sol@medium, inherit-parent, copilot:kimi-k3@high"
     );
-    expect(sheet).toContain("copilot:kimi-k3@high");
+    expect(sheet).toContain("copilot:gpt-6-astra@low");
+    expect(sheet).toContain("copilot:claude-opus-5@medium");
     expect(sheet).not.toContain("copilot:claude-opus-4.8@high");
     expect(sheet).not.toContain("claude-opus-5-1m");
+    expect(setup).toContain("pstack:pstack-<stem>");
+    expect(setup).not.toContain("pstack:pstack-<stem>-<effort>");
     expect(setup).toContain("opus5");
+    expect(setup).toContain("astra");
     expect(setup).not.toContain("opus48");
     expect(sheet).not.toContain("claude:fable");
     expect(sheet).not.toContain("grok:grok-4.6");
