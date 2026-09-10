@@ -4,14 +4,14 @@ This repository is a local GitHub Copilot CLI plugin. The repo root is the plugi
 
 It packages the Copilot parent from [open-pstack](https://github.com/ericlitman/open-pstack). Skills stay shared. Copilot-only agents live in `agents/` as `*.agent.md` files. Claude `agents/*.md` files are not here. Copilot loads every `*.md` and `*.agent.md` in the plugin agents directory.
 
-Do not copy `skills/` into `~/.agents/skills/`. Copilot loads the plugin tree. Duplicates follow if you copy it.
+Do not copy `skills/` into `~/.agents/skills/` or `~/.copilot/skills/`. Copilot loads plugin skills last. A home skill with the same `name:` silently wins, and the plugin copy is dropped.
 
 ## Install
 
-From any directory:
+From this clone:
 
 ```bash
-copilot plugin marketplace add /Users/bata02/Projects/pstack-copilot
+copilot plugin marketplace add "$(pwd)"
 copilot plugin install pstack@pstack-copilot
 ```
 
@@ -30,19 +30,33 @@ Confirm the loaded path:
 copilot plugin list
 ```
 
-The enabled plugin must load from `/Users/bata02/Projects/pstack-copilot`, not from `~/Projects/open-pstack`.
+The enabled plugin must load from this clone, not from `~/Projects/open-pstack`.
+
+### Home-skill collisions
+
+Copilot skill order is first-found-wins. Plugin skills lose to `~/.agents/skills/` and `~/.copilot/skills/`. If `/how` or `/poteto-mode` still looks like Cursor (composer models, `disable-model-invocation`), a home copy is winning.
+
+Move colliding names out of the way. Keep the backup so Cursor or Grok can still use them:
+
+```bash
+mkdir -p ~/.agents/skills.bak-pstack-copilot
+# example; move every name that also exists in this repo's skills/
+mv ~/.agents/skills/poteto-mode ~/.agents/skills.bak-pstack-copilot/
+```
+
+Then `copilot skill list`. pstack names should come from the plugin, not `Custom skills`.
 
 ## Latch poteto-mode
 
-A `sessionStart` hook injects a short mandate that routes non-trivial work into `/poteto-mode`. Copilot may ask you to trust that hook. The full skill still loads only when invoked.
+A `sessionStart` hook submits `/poteto-mode` on a new interactive session and injects a short mandate as `additionalContext` (resume and `-p` included). Copilot may ask you to trust that hook. The prompt hook does not fire on resume or `-p`.
 
-Copilot namespaces plugin agents. `--agent poteto-agent` is rejected. Latch the full style for the session with:
+The mandate is not sticky across turns. Latch the full style for the session with:
 
 ```bash
 copilot --agent pstack:poteto-agent
 ```
 
-You can also pick `pstack:poteto-agent` with `/agent`.
+You can also pick `pstack:poteto-agent` with `/agent`. `--agent poteto-agent` is rejected.
 
 Copilot Desktop `task()` uses file stems from `~/.copilot/agents/`, not `pstack:<stem>`. Link spawnable plugin agents there so `comment-sicko` and family lanes appear in the enum:
 
@@ -98,7 +112,7 @@ Copilot first-run defaults:
 ├── .github/plugin/marketplace.json   # marketplace name pstack-copilot, source ./
 ├── .github/plugin/plugin.json        # plugin name pstack, agents/, skills/, hooks/
 ├── agents/                           # Copilot-only *.agent.md
-├── hooks/                            # sessionStart: injects the poteto-mode mandate
+├── hooks/                            # sessionStart: /poteto-mode plus mandate
 └── skills/                           # shared pstack skills, including setup-pstack and poteto-mode
 ```
 

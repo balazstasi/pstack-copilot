@@ -12,28 +12,25 @@ describe("copilot sessionStart hook", () => {
   const marketplace = JSON.parse(
     readFileSync(join(PLUGIN_ROOT, ".github/plugin/marketplace.json"), "utf8"),
   );
-  const hooks = JSON.parse(
-    readFileSync(join(HOOKS, "copilot-hooks.json"), "utf8"),
-  );
-  const mandate = readFileSync(
-    join(HOOKS, "session-start-context.md"),
-    "utf8",
-  );
+  const hooks = JSON.parse(readFileSync(join(HOOKS, "hooks.json"), "utf8"));
+  const mandate = readFileSync(join(HOOKS, "session-start-context.md"), "utf8");
 
-  it("registers the Copilot hook file from both manifests", () => {
-    expect(manifest.hooks).toBe("hooks/copilot-hooks.json");
-    expect(marketplace.plugins[0].hooks).toBe("hooks/copilot-hooks.json");
+  it("registers the Copilot default hook path from both manifests", () => {
+    expect(manifest.hooks).toBe("hooks/hooks.json");
+    expect(marketplace.plugins[0].hooks).toBe("hooks/hooks.json");
   });
 
-  it("is a sessionStart command hook, not a prompt and not a subagent injector", () => {
+  it("submits /poteto-mode and injects the mandate as additionalContext", () => {
     expect(hooks.version).toBe(1);
     expect(Object.keys(hooks.hooks)).toEqual(["sessionStart"]);
-    const [entry] = hooks.hooks.sessionStart;
-    expect(entry.type).toBe("command");
-    expect(entry.bash).toContain("${PLUGIN_ROOT}/hooks/session-start");
-    expect(entry.powershell).toContain("${PLUGIN_ROOT}\\hooks\\session-start.ps1");
-    expect(JSON.stringify(hooks)).not.toContain('"prompt"');
-    expect(JSON.stringify(hooks)).not.toContain("subagentStart");
+    const [prompt, command] = hooks.hooks.sessionStart;
+    expect(prompt).toEqual({ type: "prompt", prompt: "/poteto-mode" });
+    expect(command.type).toBe("command");
+    expect(command.bash).toContain("${PLUGIN_ROOT}/hooks/session-start");
+    expect(command.powershell).toContain(
+      "${PLUGIN_ROOT}\\hooks\\session-start.ps1",
+    );
+    expect(command.timeoutSec).toBe(30);
   });
 
   it("emits additionalContext with the Copilot poteto-mode mandate", () => {

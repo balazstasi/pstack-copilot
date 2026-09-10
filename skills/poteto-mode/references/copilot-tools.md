@@ -84,7 +84,11 @@ Some triggers name skills that ship with Claude Code, not pstack. They do not ex
 
 ## Session identity
 
-A `sessionStart` plugin hook injects the poteto-mode routing mandate as `additionalContext`. It does not load the full skill. Sticky `/poteto-mode` across turns does not exist. Latch the session with `copilot --agent pstack:poteto-agent` or `/agent` when you want the full style for the whole session. Skills stay on-demand otherwise.
+A `sessionStart` plugin hook lives at `hooks/hooks.json` (Copilot's default plugin hook path). On a new interactive session it submits `/poteto-mode` as a prompt hook, which actually loads the skill. It also injects a short routing mandate as `additionalContext` so resume and `-p` still see the instruction. The prompt hook does not fire on resume or `-p`.
+
+The mandate is not sticky across turns. Latch the full style for the session with `copilot --agent pstack:poteto-agent` or `/agent`. `--agent poteto-agent` is rejected. Skills stay on-demand otherwise.
+
+Plugin skills lose to `~/.agents/skills/` and `~/.copilot/skills/` on name collision. Do not keep a home copy of `poteto-mode`, `how`, `why`, or `unslop` if you want the plugin versions.
 
 ## Instructions file
 

@@ -102,7 +102,6 @@ judgment and prose: claude:fable@max
 hardest tasks: claude:fable@max
 how explorer: grok:grok-4.6@xhigh
 how explainer: claude:fable@max
-how critics: claude:fable@max, codex:gpt-5.6-sol@max, grok:grok-4.6@xhigh, claude:opus@xhigh
 why investigators, synthesizer: inherit-parent
 reflect tooling, judgment, divergent, synthesizer: inherit-parent
 arena runners: claude:fable@max, codex:gpt-5.6-sol@max, grok:grok-4.6@xhigh, claude:opus@xhigh
@@ -132,14 +131,14 @@ Use this section when step 1 recorded Copilot CLI. Keep Why and Reflect on `inhe
 
 ### Copilot panel fan-out
 
-Panel roles (how critics, arena runners, arena cross-judge pool, architect runners, interrogate reviewers) share one list. One native lane runs per entry. The list length is the fan-out count.
+Panel roles (arena runners, arena cross-judge pool, architect runners, interrogate reviewers) share one list. One native lane runs per entry. The list length is the fan-out count. How is explain-only. It has no critic panel.
 
 Ask 2 or 3. Default 3. Each lane must be a different Copilot-native family. Do not put `inherit-parent` or `auto` on a panel unless the operator names it after you say it duplicates the parent model.
 
 Default 3: `copilot:gpt-5.6-terra@high, copilot:gpt-5.6-sol@medium, copilot:kimi-k3@high`
 Default 2: `copilot:gpt-5.6-terra@high, copilot:gpt-5.6-sol@medium`
 
-A named change may pick any 2 or 3 distinct Copilot-native families (terra, sol, luna, opus5, kimi, astra). Apply the chosen list to all five panel roles unless the operator names a per-role exception.
+A named change may pick any 2 or 3 distinct Copilot-native families (terra, sol, luna, opus5, kimi, astra). Apply the chosen list to all four panel roles unless the operator names a per-role exception.
 
 If the loaded sheet still uses the old first-run list (`terra, sol, inherit-parent, kimi`), propose the new 3-lane default. That is the successor first-run, not a reset of a named customization.
 
@@ -168,7 +167,6 @@ judgment and prose: copilot:claude-opus-5@medium
 hardest tasks: copilot:gpt-5.6-terra@high
 how explorer: copilot:gpt-5.6-luna@xhigh
 how explainer: copilot:gpt-5.6-terra@high
-how critics: copilot:gpt-5.6-terra@high, copilot:gpt-5.6-sol@medium, copilot:kimi-k3@high
 why investigators, synthesizer: inherit-parent
 reflect tooling, judgment, divergent, synthesizer: inherit-parent
 arena runners: copilot:gpt-5.6-terra@high, copilot:gpt-5.6-sol@medium, copilot:kimi-k3@high
@@ -184,4 +182,6 @@ Require the final Copilot role map to contain at least one descriptor from each 
 
 Write `~/.copilot/pstack-models.md` and the bounded include in `~/.copilot/copilot-instructions.md` only after every native probe passes and the operator confirms. Snapshot, write, read back, restore on failure, same as step 8.
 
-Before declaring setup complete, run one small read-only mixed panel using the configured panel (default terra, sol, kimi), distinct output paths, then a lead synthesis on the parent. That smoke also proves `subagents.maxConcurrency` is at least the panel size (3 by default). If fewer lanes start than configured, stop and raise concurrency before writing a passing report.
+Before writing a passing report, ensure `~/.copilot/settings.json` has `subagents.maxConcurrency` at least the panel size (3 by default) and `subagents.maxDepth` at least 2. Do not lower an existing higher value. Merge those keys; leave unrelated settings alone.
+
+Before declaring setup complete, run one small read-only mixed panel using the configured panel (default terra, sol, kimi), distinct output paths, then a lead synthesis on the parent. That smoke also proves concurrency is high enough. If fewer lanes start than configured, stop and raise concurrency before writing a passing report.
