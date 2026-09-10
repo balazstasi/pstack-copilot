@@ -1,6 +1,6 @@
 # pstack for GitHub Copilot
 
-This repository is a local GitHub Copilot plugin for the Copilot app and Copilot CLI. The repo root is the plugin.
+This repository is a GitHub Copilot plugin for the Copilot app and Copilot CLI. The repo root is the plugin.
 
 It packages the Copilot parent from [open-pstack](https://github.com/ericlitman/open-pstack). Skills stay shared. Copilot-only agents live in `agents/` as `*.agent.md` files. Claude `agents/*.md` files are not here. Copilot loads every `*.md` and `*.agent.md` in the plugin agents directory.
 
@@ -10,16 +10,21 @@ Do not copy `skills/` into `~/.agents/skills/` or `~/.copilot/skills/`. Copilot 
 
 The Copilot app and Copilot CLI share `~/.copilot/settings.json`. Install once.
 
-From this clone:
-
 ```bash
-copilot plugin marketplace add "$(pwd)"
+copilot plugin marketplace add balazstasi/pstack-copilot
 copilot plugin install pstack@pstack-copilot
 ```
 
 That writes `extraKnownMarketplaces.pstack-copilot` and `enabledPlugins["pstack@pstack-copilot"]`.
 
-In the Copilot app you can do the same from **Customize → Plugins**. Add this clone as a custom marketplace, then install `pstack`.
+In the Copilot app: **Customize → Plugins**, add marketplace `balazstasi/pstack-copilot`, then install `pstack`.
+
+From a local clone instead:
+
+```bash
+copilot plugin marketplace add "$(pwd)"
+copilot plugin install pstack@pstack-copilot
+```
 
 If an older `pstack@open-pstack` marketplace is still enabled, disable or uninstall it so two pstacks do not load:
 
@@ -34,7 +39,7 @@ Confirm the loaded path:
 copilot plugin list
 ```
 
-The enabled plugin must load from this clone, not from `~/Projects/open-pstack`.
+The enabled plugin must load from this repo, not from `~/Projects/open-pstack`.
 
 ### Home-skill collisions
 
