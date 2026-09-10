@@ -333,6 +333,11 @@ describe("model matrix", () => {
       "| astra | gpt-6-astra | copilot | low | low | astra |"
     );
     expect(dispatch).toContain(
+      "| copilot-grok | grok-4.6 | copilot | high | high | grok |"
+    );
+    expect(dispatch).toContain("`copilot:grok-4.6` is Copilot Grok");
+    expect(dispatch).toContain("`grok:grok-4.6` remains the Grok CLI");
+    expect(dispatch).toContain(
       "| luna | gpt-5.6-luna | copilot | xhigh | xhigh | luna |"
     );
     expect(dispatch).not.toContain("3565");
@@ -343,6 +348,7 @@ describe("model matrix", () => {
     expect(tools).toContain("`agent_type: pstack-<stem>`");
     expect(tools).toContain("--agent pstack:pstack-<stem>");
     expect(tools).toContain("`agent_type: comment-sicko`");
+    expect(tools).toContain("`copilot:grok-4.6` is native `pstack-grok`");
     expect(tools).not.toContain("pstack-<stem>-<effort>");
     expect(tools).not.toContain("3565");
     expect(
@@ -368,6 +374,7 @@ describe("model matrix", () => {
       ],
       ["kimi", "kimi-k3", "kimi", "high", ["high"], null],
       ["astra", "gpt-6-astra", "astra", "low", ["low"], null],
+      ["copilot-grok", "grok-4.6", "grok", "high", ["high"], null],
     ]);
     const expected = new Set<string>([
       "poteto-agent.agent.md",
@@ -420,7 +427,10 @@ describe("model matrix", () => {
       throw new Error("setup-pstack is missing the Copilot first-run sheet fence");
     }
     const sheet = match[1];
-    for (const family of COPILOT_NATIVE_FAMILIES) {
+    const firstRunFamilies = COPILOT_NATIVE_FAMILIES.filter(
+      (family) => family.family !== "opus5"
+    );
+    for (const family of firstRunFamilies) {
       expect(sheet).toContain(
         `copilot:${family.model}@${family.defaultEffort}`
       );
@@ -441,19 +451,23 @@ describe("model matrix", () => {
     expect(setup).toContain("Default 3:");
     expect(setup).toContain("Default 2:");
     expect(sheet).toContain("copilot:gpt-6-astra@low");
-    expect(sheet).toContain("copilot:claude-opus-5@medium");
+    expect(sheet).toContain("judgment and prose: copilot:grok-4.6@high");
+    expect(sheet).not.toContain("judgment and prose: copilot:claude-opus-5@medium");
     expect(sheet).not.toContain("copilot:claude-opus-4.8@high");
     expect(sheet).not.toContain("claude-opus-5-1m");
     expect(setup).toContain("pstack:pstack-<stem>");
     expect(setup).not.toContain("pstack:pstack-<stem>-<effort>");
     expect(setup).toContain("opus5");
     expect(setup).toContain("astra");
+    expect(setup).toContain("pstack-grok");
+    expect(setup).toContain("Never treat a request for Copilot Grok as the Grok CLI route.");
     expect(setup).not.toContain("opus48");
     expect(sheet).not.toContain("claude:fable");
     expect(sheet).not.toContain("grok:grok-4.6");
     expect(setup).toContain("~/.copilot/pstack-models.md");
     expect(setup).toContain("A silent downgrade to the parent session model is a failed probe.");
     expect(setup).toContain("Never map claude:fable to terra");
+    expect(setup).toContain("grok:grok-4.6 to Copilot Grok");
   });
 });
 

@@ -98,13 +98,13 @@ Copilot first-run defaults:
 
 - feature / refactoring / how explorer → `copilot:gpt-5.6-luna@xhigh`
 - swarm workers → `copilot:gpt-6-astra@low`
-- judgment and prose → `copilot:claude-opus-5@medium`
+- judgment and prose → `copilot:grok-4.6@high`
 - hardest / how explainer → `copilot:gpt-5.6-terra@high`
 - bug-fix / perf / hillclimb → `copilot:gpt-5.6-sol@medium`
 - panels → terra, sol, kimi (2 or 3 distinct families; `/setup-pstack` sets the list)
 - why / reflect → `inherit-parent`
 
-`copilot:gpt-5.6-sol@medium` is Copilot Sol. `codex:gpt-5.6-sol` still means the Codex CLI. Setup never maps Fable to Terra.
+`copilot:gpt-5.6-sol@medium` is Copilot Sol. `codex:gpt-5.6-sol` still means the Codex CLI. `copilot:grok-4.6@high` is Copilot Grok (`pstack-grok`). `grok:grok-4.6` still means the Grok CLI. Setup never maps Fable to Terra or Grok CLI to Copilot Grok.
 
 ## Layout
 

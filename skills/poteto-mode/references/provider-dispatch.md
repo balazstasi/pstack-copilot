@@ -21,7 +21,7 @@ The allowed effort universe is exactly `low`, `medium`, `high`, `xhigh`, `max`. 
 
 ## Copilot-native families
 
-These rows are native only on a Copilot parent. They are not silent stand-ins for the portable matrix above. `copilot:gpt-5.6-sol` is Copilot Sol. `codex:gpt-5.6-sol` remains the Codex CLI.
+These rows are native only on a Copilot parent. They are not silent stand-ins for the portable matrix above. `copilot:gpt-5.6-sol` is Copilot Sol. `codex:gpt-5.6-sol` remains the Codex CLI. `copilot:grok-4.6` is Copilot Grok. `grok:grok-4.6` remains the Grok CLI.
 
 | Family | Descriptor model | Provider | Default effort | Selectable efforts | Copilot-native agent stem |
 |---|---|---|---|---|---|
@@ -31,6 +31,7 @@ These rows are native only on a Copilot parent. They are not silent stand-ins fo
 | opus5 | claude-opus-5 | copilot | medium | medium | opus5 |
 | kimi | kimi-k3 | copilot | high | high | kimi |
 | astra | gpt-6-astra | copilot | low | low | astra |
+| copilot-grok | grok-4.6 | copilot | high | high | grok |
 
 The shipped Copilot agent name is `pstack-<stem>` under `agents/`. Each file pins `model` and that family's only `reasoning-effort`. Copilot `task()` has no spawn-time effort, so the sheet cannot pick a second effort for a family. This Copilot-only plugin keeps Claude `agents/*.md` files out of that directory. Copilot loads every `*.md` and `*.agent.md` in its agents path. Opus 5 lanes pin `context-tier: default` (the small window). Do not use `claude-opus-5-1m`, `claude-opus-5[1m]`, or `long_context`.
 
@@ -92,7 +93,7 @@ The parent invocation must itself be resumable background work:
 
 - Claude Code: call the launcher through a Bash tool invocation with `run_in_background: true` and retain its task ID. A foreground Bash tool call has an automatic ten-minute ceiling even when the runner's own timeout is longer. Shelling out with `&` and losing the task handle is not equivalent.
 - Codex: run the launcher in a persistent exec session that returns a session ID, then wait or poll that handle. Do not hold one foreground tool call open for the model's full runtime.
-- Copilot CLI: invoke the launcher through `execute`/`shell` as background work if the session exposes it, and retain the handle. Copilot is a parent, not an external `--provider`. Never map `claude:fable` to terra or `codex:gpt-5.6-sol` to Copilot Sol.
+- Copilot CLI: invoke the launcher through `execute`/`shell` as background work if the session exposes it, and retain the handle. Copilot is a parent, not an external `--provider`. Never map `claude:fable` to terra, `codex:gpt-5.6-sol` to Copilot Sol, or `grok:grok-4.6` to Copilot Grok.
 
 Start the background process, continue launching the other lanes, then drain their handles. Native and external lanes belong in the same fan-out phase.
 
