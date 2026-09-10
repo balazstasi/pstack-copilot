@@ -3,10 +3,14 @@
   "hooks": {
     "sessionStart": [
       {
+        "type": "prompt",
+        "prompt": "/poteto-mode"
+      },
+      {
         "type": "command",
         "bash": "bash \"${PLUGIN_ROOT}/hooks/session-start\"",
         "powershell": "& \"${PLUGIN_ROOT}\\hooks\\session-start.ps1\"",
-        "timeoutSec": 5
+        "timeoutSec": 30
       }
     ]
   }

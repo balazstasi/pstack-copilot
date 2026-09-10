@@ -8,6 +8,8 @@ const OUT_DIR = join(import.meta.dir, "../../../../agents");
 const LANE_BODY = `# pstack Copilot lane
 
 Execute only the task and path scope the parent assigns. Read the grounding artifacts by path. Do not choose another model, spawn another agent, or start a pstack workflow. If the assignment is read-only, do not modify files. Return the requested artifact or verdict plus a concise rationale.
+
+Do not pick this file as the Copilot app session agent. That is poteto-agent.
 `;
 
 function write(relPath: string, contents: string): void {
@@ -25,7 +27,7 @@ write(
   "poteto-agent.agent.md",
   `---
 name: poteto-agent
-description: Routing target for /poteto-mode. Reads poteto-mode SKILL.md in full before any work.
+description: pstack session agent for the Copilot app and CLI. Loads poteto-mode before any work.
 tools: ["*"]
 model: gpt-5.6-terra
 reasoning-effort: high
@@ -35,6 +37,8 @@ You are operating as poteto-mode's full agent style. Call the skill tool
 with skill: poteto-mode before any work, including the Principles index.
 Then View copilot-tools.md from that skill-context Base directory as an
 absolute path. Follow its Skill path resolution and Subagent policy.
+
+This profile is the session. Do not tell the user to run copilot --agent.
 
 Never View a path that ends in SKILL.md. Load every other pstack skill with
 the skill tool by name. Playbooks are <Base directory>/playbooks/<file>.md.
@@ -94,7 +98,7 @@ for (const family of COPILOT_NATIVE_FAMILIES) {
     `${name}.agent.md`,
     `---
 name: ${name}
-description: Native Copilot lane for pstack roles configured as copilot:${family.model}@${family.defaultEffort}.
+description: Spawn lane for pstack roles configured as copilot:${family.model}@${family.defaultEffort}. Not the Copilot app session agent.
 tools: ["read", "search", "execute", "edit", "todo", "web"]
 model: ${family.model}
 reasoning-effort: ${family.defaultEffort}

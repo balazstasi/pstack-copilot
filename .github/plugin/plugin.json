@@ -1,7 +1,7 @@
 {
   "name": "pstack",
-  "description": "Rigorous, parallelizable agent workflows for Copilot CLI. Copilot-native parent of pstack.",
-  "version": "1.4.1",
+  "description": "Rigorous, parallelizable agent workflows for the Copilot app and Copilot CLI. Copilot-native parent of pstack.",
+  "version": "1.4.3",
   "author": {
     "name": "Lauren Tan"
   },
@@ -15,5 +15,5 @@
   ],
   "agents": "agents/",
   "skills": "skills/",
-  "hooks": "hooks/copilot-hooks.json"
+  "hooks": "hooks/hooks.json"
 }

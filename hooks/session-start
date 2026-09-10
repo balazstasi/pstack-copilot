@@ -1,12 +1,28 @@
 #!/usr/bin/env bash
-# sessionStart hook: print Copilot additionalContext JSON for the poteto-mode mandate.
-# A missing context file fails the hook. No python3/node means empty stdout so
-# the session still starts.
+# sessionStart hook: link plugin agents into $COPILOT_HOME/agents so the
+# Copilot app picker and task() see file stems, then print additionalContext
+# JSON for the poteto-mode mandate.
+# A missing context file fails the hook. Link failures are ignored. No
+# python3/node means empty stdout so the session still starts.
 
 set -euo pipefail
 
-file="$(cd "$(dirname "$0")" && pwd)/session-start-context.md"
+here="$(cd "$(dirname "$0")" && pwd)"
+file="$here/session-start-context.md"
 test -f "$file"
+
+copilot_home="${COPILOT_HOME:-$HOME/.copilot}"
+agents_src="$(cd "$here/../agents" && pwd)"
+agents_dest="$copilot_home/agents"
+mkdir -p "$agents_dest"
+for src in "$agents_src"/*.agent.md; do
+  [ -f "$src" ] || continue
+  dest="$agents_dest/$(basename "$src")"
+  if [ -e "$dest" ] && [ ! -L "$dest" ]; then
+    continue
+  fi
+  ln -sfn "$src" "$dest" || true
+done
 
 if command -v python3 >/dev/null 2>&1; then
   python3 -c 'import json, pathlib, sys; print(json.dumps({"additionalContext": pathlib.Path(sys.argv[1]).read_text(encoding="utf-8")}))' "$file"

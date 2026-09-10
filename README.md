@@ -1,21 +1,25 @@
-# pstack for Copilot CLI
+# pstack for GitHub Copilot
 
-This repository is a local GitHub Copilot CLI plugin. The repo root is the plugin. Install it the same way you install ponytail from a local checkout.
+This repository is a local GitHub Copilot plugin for the Copilot app and Copilot CLI. The repo root is the plugin.
 
 It packages the Copilot parent from [open-pstack](https://github.com/ericlitman/open-pstack). Skills stay shared. Copilot-only agents live in `agents/` as `*.agent.md` files. Claude `agents/*.md` files are not here. Copilot loads every `*.md` and `*.agent.md` in the plugin agents directory.
 
-Do not copy `skills/` into `~/.agents/skills/`. Copilot loads the plugin tree. Duplicates follow if you copy it.
+Do not copy `skills/` into `~/.agents/skills/` or `~/.copilot/skills/`. Copilot loads plugin skills last. A home skill with the same `name:` silently wins, and the plugin copy is dropped.
 
 ## Install
 
-From any directory:
+The Copilot app and Copilot CLI share `~/.copilot/settings.json`. Install once.
+
+From this clone:
 
 ```bash
-copilot plugin marketplace add /Users/bata02/Projects/pstack-copilot
+copilot plugin marketplace add "$(pwd)"
 copilot plugin install pstack@pstack-copilot
 ```
 
-That writes `extraKnownMarketplaces.pstack-copilot` and `enabledPlugins["pstack@pstack-copilot"]` in `~/.copilot/settings.json`.
+That writes `extraKnownMarketplaces.pstack-copilot` and `enabledPlugins["pstack@pstack-copilot"]`.
+
+In the Copilot app you can do the same from **Customize → Plugins**. Add this clone as a custom marketplace, then install `pstack`.
 
 If an older `pstack@open-pstack` marketplace is still enabled, disable or uninstall it so two pstacks do not load:
 
@@ -30,29 +34,35 @@ Confirm the loaded path:
 copilot plugin list
 ```
 
-The enabled plugin must load from `/Users/bata02/Projects/pstack-copilot`, not from `~/Projects/open-pstack`.
+The enabled plugin must load from this clone, not from `~/Projects/open-pstack`.
 
-## Latch poteto-mode
+### Home-skill collisions
 
-A `sessionStart` hook injects a short mandate that routes non-trivial work into `/poteto-mode`. Copilot may ask you to trust that hook. The full skill still loads only when invoked.
+Copilot skill order is first-found-wins. Plugin skills lose to `~/.agents/skills/` and `~/.copilot/skills/`. If `/how` or `/poteto-mode` still looks like Cursor (composer models, `disable-model-invocation`), a home copy is winning.
 
-Copilot namespaces plugin agents. `--agent poteto-agent` is rejected. Latch the full style for the session with:
+Move colliding names out of the way. Keep the backup so Cursor or Grok can still use them:
+
+```bash
+mkdir -p ~/.agents/skills.bak-pstack-copilot
+# example; move every name that also exists in this repo's skills/
+mv ~/.agents/skills/poteto-mode ~/.agents/skills.bak-pstack-copilot/
+```
+
+Then `copilot skill list`. pstack names should come from the plugin, not `Custom skills`.
+
+## Run with the pstack agent
+
+Pick **poteto-agent** in the Copilot app agent picker (or type `/agent`). That file is sticky for the session. It loads `poteto-mode` before any work. There is no extra CLI latch.
+
+Copilot CLI uses the plugin id:
 
 ```bash
 copilot --agent pstack:poteto-agent
 ```
 
-You can also pick `pstack:poteto-agent` with `/agent`.
+`pstack-terra` and the other `pstack-<stem>` files are spawn lanes for `task()`. Do not pick them as the session agent.
 
-Copilot Desktop `task()` uses file stems from `~/.copilot/agents/`, not `pstack:<stem>`. Link spawnable plugin agents there so `comment-sicko` and family lanes appear in the enum:
-
-```bash
-mkdir -p ~/.copilot/agents
-ln -sf "$(pwd)/agents/comment-sicko.agent.md" ~/.copilot/agents/comment-sicko.agent.md
-ln -sf "$(pwd)/agents/poteto-agent.agent.md" ~/.copilot/agents/poteto-agent.agent.md
-```
-
-Run those from the plugin root (`copilot plugin list` shows the live path). `task()` then takes `agent_type: comment-sicko`. `pstack:comment-sicko` is CLI `--agent` only.
+A `sessionStart` hook submits `/poteto-mode` on a new default-agent session and injects a short mandate as `additionalContext` (resume and `-p` included). Copilot may ask you to trust that hook. The prompt hook does not fire on resume or `-p`. The same hook links every `agents/*.agent.md` into `~/.copilot/agents/` so the Copilot app picker and `task()` see file stems. It does not replace a regular file of the same name.
 
 ## Fan-out limits
 
@@ -67,11 +77,11 @@ Before a panel, set these in `~/.copilot/settings.json` so concurrency is at lea
 }
 ```
 
-Values below the panel size collapse how-critics, arena, architect, and interrogate.
+Values below the panel size collapse arena, architect, and interrogate.
 
 ## Configure models
 
-In Copilot CLI:
+In Copilot CLI or the Copilot app:
 
 ```text
 /setup-pstack
@@ -98,7 +108,7 @@ Copilot first-run defaults:
 ├── .github/plugin/marketplace.json   # marketplace name pstack-copilot, source ./
 ├── .github/plugin/plugin.json        # plugin name pstack, agents/, skills/, hooks/
 ├── agents/                           # Copilot-only *.agent.md
-├── hooks/                            # sessionStart: injects the poteto-mode mandate
+├── hooks/                            # sessionStart: /poteto-mode, mandate, agent links
 └── skills/                           # shared pstack skills, including setup-pstack and poteto-mode
 ```
 

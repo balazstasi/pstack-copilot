@@ -81,8 +81,11 @@ describe("copilot skill path anchors", () => {
       "${PLUGIN_ROOT}/skills/poteto-mode/references/copilot-tools.md",
     );
     expect(agent).toContain("skill: poteto-mode");
+    expect(agent).toContain("This profile is the session");
     expect(agent).toContain("Never View a path that ends in SKILL.md");
     expect(agent).toContain("Never View a bare filename");
     expect(generator).toContain("Never View a path that ends in SKILL.md");
+    expect(generator).toContain("This profile is the session");
+    expect(tools).toContain("Pick `poteto-agent` in the Copilot app agent picker");
   });
 });

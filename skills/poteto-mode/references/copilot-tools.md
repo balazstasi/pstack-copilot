@@ -18,7 +18,7 @@ pstack skills retain Claude Code tool language (`Skill`, `Agent`, `AskUserQuesti
 | `/loop` | Dropout. `keepAlive: busy` only keeps the session alive. |
 | Instructions file | `~/.copilot/copilot-instructions.md` plus the project `AGENTS.md` if present. |
 
-CLI `--agent` and `/agent` use the plugin-namespaced id `pstack:<file-stem>`. `--agent poteto-agent` is rejected. Copilot Desktop `task()` does not accept those namespaced ids. Its `agent_type` enum is the file stem (`poteto-agent`, `comment-sicko`, `pstack-terra`). Spawn that stem. If the stem is missing from the enum, link `agents/<stem>.agent.md` from the plugin root into `~/.copilot/agents/` and retry. Never pass `pstack:comment-sicko` to `task()`.
+CLI `--agent` and `/agent` use the plugin-namespaced id `pstack:<file-stem>`. The Copilot app agent picker and `task()` use the file stem (`poteto-agent`, `comment-sicko`, `pstack-terra`). Spawn that stem. `sessionStart` links each `agents/<stem>.agent.md` into `~/.copilot/agents/` so those stems exist. Never pass `pstack:comment-sicko` to `task()`.
 
 Copilot scans every `*.md` and `*.agent.md` in the plugin agents directory. This Copilot-only plugin keeps those files under `agents/` as `*.agent.md`. Do not copy Claude `agents/*.md` files here.
 
@@ -26,10 +26,10 @@ Copilot scans every `*.md` and `*.agent.md` in the plugin agents directory. This
 
 poteto-mode's Subagents section sets Claude-specific defaults (`subagent_type: "poteto-agent"`, `run_in_background: true`). On Copilot:
 
-- Route an ad-hoc subagent through poteto-mode's style by dispatching `poteto-agent`. That profile loads `poteto-mode` with the skill tool first. CLI `--agent` still uses `pstack:poteto-agent`.
-- Dispatch a native family lane as `pstack-<stem>`. That file pins `model` and `reasoning-effort` at the family's default. Opus 5 also pins `context-tier: default` (small window, not `long_context`). CLI `--agent` still uses `pstack:pstack-<stem>`.
+- Route an ad-hoc subagent through poteto-mode's style by dispatching `poteto-agent`. That profile loads `poteto-mode` with the skill tool first. CLI `--agent` still uses `pstack:poteto-agent`. The Copilot app picker uses `poteto-agent`.
+- Dispatch a native family lane as `pstack-<stem>`. That file pins `model` and `reasoning-effort` at the family's default. Opus 5 also pins `context-tier: default` (small window, not `long_context`). CLI `--agent` still uses `pstack:pstack-<stem>`. Do not pick a family lane as the Copilot app session agent.
 - The **no-comments** skill spawns `comment-sicko`. That profile pins `gpt-5.6-luna` at xhigh effort and has read and search tools only. Do not omit `model` on `task()` if a hook require-list would treat an unset model as a deny. The agent file already pins it, so spawn-time `model` is optional.
-- Raise `subagents.maxConcurrency` to at least the configured panel size (3 by default) and `subagents.maxDepth` to at least 2 in `~/.copilot/settings.json`. Values below the panel size collapse how-critics, arena, architect, and interrogate.
+- Raise `subagents.maxConcurrency` to at least the configured panel size (3 by default) and `subagents.maxDepth` to at least 2 in `~/.copilot/settings.json`. Values below the panel size collapse arena, architect, and interrogate.
 - Keep the rest of the policy unchanged. Pass file pointers not inlined context. Give each writer its own worktree. Review every subagent's diff yourself.
 
 ## Models and providers
@@ -84,7 +84,11 @@ Some triggers name skills that ship with Claude Code, not pstack. They do not ex
 
 ## Session identity
 
-A `sessionStart` plugin hook injects the poteto-mode routing mandate as `additionalContext`. It does not load the full skill. Sticky `/poteto-mode` across turns does not exist. Latch the session with `copilot --agent pstack:poteto-agent` or `/agent` when you want the full style for the whole session. Skills stay on-demand otherwise.
+A `sessionStart` plugin hook lives at `hooks/hooks.json` (Copilot's default plugin hook path). On a new interactive session it submits `/poteto-mode` as a prompt hook, which actually loads the skill. It also injects a short routing mandate as `additionalContext` so resume and `-p` still see the instruction. The prompt hook does not fire on resume or `-p`. The same hook links plugin agents into `~/.copilot/agents/` (or `$COPILOT_HOME/agents`) so the Copilot app picker and `task()` see file stems. It skips a regular file of the same name.
+
+Pick `poteto-agent` in the Copilot app agent picker. That profile is sticky for the session. CLI `/agent` or `copilot --agent pstack:poteto-agent` is the same file. Do not treat the CLI flag as an extra step after picking the agent. Skills stay on-demand on the default Copilot agent.
+
+Plugin skills lose to `~/.agents/skills/` and `~/.copilot/skills/` on name collision. Do not keep a home copy of `poteto-mode`, `how`, `why`, or `unslop` if you want the plugin versions.
 
 ## Instructions file
 
