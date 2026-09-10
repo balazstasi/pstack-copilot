@@ -127,7 +127,7 @@ Report the sheet path, parent route table, requested-effort probe results, smoke
 
 ## Copilot parent
 
-Use this section when step 1 recorded Copilot CLI. Keep Why and Reflect on `inherit-parent`. Do not require the portable Fable / Sol / Grok / Opus quartet on a first run.
+Use this section when step 1 recorded Copilot CLI or the Copilot app. They share `~/.copilot/settings.json`. Pick `poteto-agent` in the Copilot app agent picker. `sessionStart` links plugin agents into `~/.copilot/agents` so `task()` stems match. Do not ask the operator to run `copilot --agent`. Keep Why and Reflect on `inherit-parent`. Do not require the portable Fable / Sol / Grok / Opus quartet on a first run.
 
 ### Copilot panel fan-out
 
