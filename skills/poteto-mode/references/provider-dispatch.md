@@ -52,7 +52,7 @@ The top-level harness resolves the route once. A child receives an assigned prov
 | Codex | external runner | native `spawn_agent` | external runner | n/a |
 | Copilot CLI | external runner | external runner | external runner | native `pstack-<stem>` |
 
-`inherit-parent` and `auto` remain aliases. They use the parent's current model and effort through its native subagent primitive. In a panel they still consume one lane, but they reduce provider diversity; say so in the synthesis record.
+`inherit-parent` and `auto` remain aliases. They use the parent's current model and effort through its native subagent primitive. In a panel they still consume one lane, but they reduce provider diversity; say so in the synthesis record. Copilot first-run panels omit those aliases and use 2 or 3 distinct Copilot-native families. The sheet list length is the fan-out.
 
 ## Native lanes
 

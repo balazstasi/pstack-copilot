@@ -130,6 +130,19 @@ Report the sheet path, parent route table, requested-effort probe results, smoke
 
 Use this section when step 1 recorded Copilot CLI. Keep Why and Reflect on `inherit-parent`. Do not require the portable Fable / Sol / Grok / Opus quartet on a first run.
 
+### Copilot panel fan-out
+
+Panel roles (how critics, arena runners, arena cross-judge pool, architect runners, interrogate reviewers) share one list. One native lane runs per entry. The list length is the fan-out count.
+
+Ask 2 or 3. Default 3. Each lane must be a different Copilot-native family. Do not put `inherit-parent` or `auto` on a panel unless the operator names it after you say it duplicates the parent model.
+
+Default 3: `copilot:gpt-5.6-terra@high, copilot:gpt-5.6-sol@medium, copilot:kimi-k3@high`
+Default 2: `copilot:gpt-5.6-terra@high, copilot:gpt-5.6-sol@medium`
+
+A named change may pick any 2 or 3 distinct Copilot-native families (terra, sol, luna, opus5, kimi, astra). Apply the chosen list to all five panel roles unless the operator names a per-role exception.
+
+If the loaded sheet still uses the old first-run list (`terra, sol, inherit-parent, kimi`), propose the new 3-lane default. That is the successor first-run, not a reset of a named customization.
+
 ### Copilot efforts and probes
 
 Use each Copilot-native family's default effort. That is also its only selectable effort. The agent file pins it. Do not ask for a second effort.
@@ -145,7 +158,7 @@ This fence is only the Copilot first-run role map. Copilot family efforts stay o
 ```markdown
 # pstack model configuration (Copilot parent)
 
-Provider-qualified per-role choices. Read the installed pstack provider-dispatch and copilot-tools references before dispatching a configured role. Every documented role remains present. `inherit-parent` and `auto` use the parent model natively and still count as one panel lane.
+Provider-qualified per-role choices. Read the installed pstack provider-dispatch and copilot-tools references before dispatching a configured role. Every documented role remains present. `inherit-parent` and `auto` use the parent model natively. Keep them on Why and Reflect. Copilot panels use 2 or 3 distinct Copilot-native families and omit those aliases unless the operator names them.
 
 feature, refactoring: copilot:gpt-5.6-luna@xhigh
 bug-fix: copilot:gpt-5.6-sol@medium
@@ -155,14 +168,14 @@ judgment and prose: copilot:claude-opus-5@medium
 hardest tasks: copilot:gpt-5.6-terra@high
 how explorer: copilot:gpt-5.6-luna@xhigh
 how explainer: copilot:gpt-5.6-terra@high
-how critics: copilot:gpt-5.6-terra@high, copilot:gpt-5.6-sol@medium, inherit-parent, copilot:kimi-k3@high
+how critics: copilot:gpt-5.6-terra@high, copilot:gpt-5.6-sol@medium, copilot:kimi-k3@high
 why investigators, synthesizer: inherit-parent
 reflect tooling, judgment, divergent, synthesizer: inherit-parent
-arena runners: copilot:gpt-5.6-terra@high, copilot:gpt-5.6-sol@medium, inherit-parent, copilot:kimi-k3@high
-arena cross-judge pool: copilot:gpt-5.6-terra@high, copilot:gpt-5.6-sol@medium, inherit-parent, copilot:kimi-k3@high
+arena runners: copilot:gpt-5.6-terra@high, copilot:gpt-5.6-sol@medium, copilot:kimi-k3@high
+arena cross-judge pool: copilot:gpt-5.6-terra@high, copilot:gpt-5.6-sol@medium, copilot:kimi-k3@high
 swarm workers: copilot:gpt-6-astra@low
-architect runners: copilot:gpt-5.6-terra@high, copilot:gpt-5.6-sol@medium, inherit-parent, copilot:kimi-k3@high
-interrogate reviewers: copilot:gpt-5.6-terra@high, copilot:gpt-5.6-sol@medium, inherit-parent, copilot:kimi-k3@high
+architect runners: copilot:gpt-5.6-terra@high, copilot:gpt-5.6-sol@medium, copilot:kimi-k3@high
+interrogate reviewers: copilot:gpt-5.6-terra@high, copilot:gpt-5.6-sol@medium, copilot:kimi-k3@high
 ```
 
 Require the final Copilot role map to contain at least one descriptor from each Copilot-native family that the operator selected. Do not require a portable-matrix family that was not probed.
@@ -171,4 +184,4 @@ Require the final Copilot role map to contain at least one descriptor from each 
 
 Write `~/.copilot/pstack-models.md` and the bounded include in `~/.copilot/copilot-instructions.md` only after every native probe passes and the operator confirms. Snapshot, write, read back, restore on failure, same as step 8.
 
-Before declaring setup complete, run one small read-only mixed panel: terra, sol, opus5, and kimi, distinct output paths, then a lead synthesis on the parent. That smoke also proves `subagents.maxConcurrency` is at least 4. If only two lanes start, stop and raise concurrency before writing a passing report.
+Before declaring setup complete, run one small read-only mixed panel using the configured panel (default terra, sol, kimi), distinct output paths, then a lead synthesis on the parent. That smoke also proves `subagents.maxConcurrency` is at least the panel size (3 by default). If fewer lanes start than configured, stop and raise concurrency before writing a passing report.

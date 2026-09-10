@@ -56,18 +56,18 @@ Run those from the plugin root (`copilot plugin list` shows the live path). `tas
 
 ## Fan-out limits
 
-Before a four-lane panel, set these in `~/.copilot/settings.json`:
+Before a panel, set these in `~/.copilot/settings.json` so concurrency is at least the configured panel size (3 by default):
 
 ```json
 {
   "subagents": {
-    "maxConcurrency": 4,
+    "maxConcurrency": 3,
     "maxDepth": 2
   }
 }
 ```
 
-Values of 2 and 1 collapse how-critics, arena, architect, and interrogate.
+Values below the panel size collapse how-critics, arena, architect, and interrogate.
 
 ## Configure models
 
@@ -86,7 +86,7 @@ Copilot first-run defaults:
 - judgment and prose → `copilot:claude-opus-5@medium`
 - hardest / how explainer → `copilot:gpt-5.6-terra@high`
 - bug-fix / perf / hillclimb → `copilot:gpt-5.6-sol@medium`
-- panels → terra, sol, `inherit-parent`, `copilot:kimi-k3@high`
+- panels → terra, sol, kimi (2 or 3 distinct families; `/setup-pstack` sets the list)
 - why / reflect → `inherit-parent`
 
 `copilot:gpt-5.6-sol@medium` is Copilot Sol. `codex:gpt-5.6-sol` still means the Codex CLI. Setup never maps Fable to Terra.

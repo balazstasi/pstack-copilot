@@ -427,9 +427,21 @@ describe("model matrix", () => {
         `copilot:${family.model}@${family.defaultEffort}`
       );
     }
-    expect(sheet).toContain(
-      "copilot:gpt-5.6-terra@high, copilot:gpt-5.6-sol@medium, inherit-parent, copilot:kimi-k3@high"
-    );
+    const copilotPanel =
+      "copilot:gpt-5.6-terra@high, copilot:gpt-5.6-sol@medium, copilot:kimi-k3@high";
+    for (const role of PANEL_ROLES) {
+      const line = sheet
+        .split("\n")
+        .find((entry) => entry.startsWith(`${role}:`));
+      if (line === undefined) {
+        throw new Error(`missing Copilot first-run panel row: ${role}`);
+      }
+      expect(line).toBe(`${role}: ${copilotPanel}`);
+      expect(line).not.toContain("inherit-parent");
+    }
+    expect(setup).toContain("Ask 2 or 3.");
+    expect(setup).toContain("Default 3:");
+    expect(setup).toContain("Default 2:");
     expect(sheet).toContain("copilot:gpt-6-astra@low");
     expect(sheet).toContain("copilot:claude-opus-5@medium");
     expect(sheet).not.toContain("copilot:claude-opus-4.8@high");

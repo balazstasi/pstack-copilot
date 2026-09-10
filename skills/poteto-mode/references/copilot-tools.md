@@ -29,7 +29,7 @@ poteto-mode's Subagents section sets Claude-specific defaults (`subagent_type: "
 - Route an ad-hoc subagent through poteto-mode's style by dispatching `poteto-agent`. That profile loads `poteto-mode` with the skill tool first. CLI `--agent` still uses `pstack:poteto-agent`.
 - Dispatch a native family lane as `pstack-<stem>`. That file pins `model` and `reasoning-effort` at the family's default. Opus 5 also pins `context-tier: default` (small window, not `long_context`). CLI `--agent` still uses `pstack:pstack-<stem>`.
 - The **no-comments** skill spawns `comment-sicko`. That profile pins `gpt-5.6-luna` at xhigh effort and has read and search tools only. Do not omit `model` on `task()` if a hook require-list would treat an unset model as a deny. The agent file already pins it, so spawn-time `model` is optional.
-- Raise `subagents.maxConcurrency` to at least 4 and `subagents.maxDepth` to at least 2 in `~/.copilot/settings.json` before a four-lane panel. Values of 2 and 1 collapse how-critics, arena, architect, and interrogate.
+- Raise `subagents.maxConcurrency` to at least the configured panel size (3 by default) and `subagents.maxDepth` to at least 2 in `~/.copilot/settings.json`. Values below the panel size collapse how-critics, arena, architect, and interrogate.
 - Keep the rest of the policy unchanged. Pass file pointers not inlined context. Give each writer its own worktree. Review every subagent's diff yourself.
 
 ## Models and providers
