@@ -24,7 +24,7 @@ Codex writes `~/.codex/pstack-models.md`. Codex has no `@` include, so mirror th
 Copilot writes `~/.copilot/pstack-models.md` the same way Codex does. Mirror the sheet's exact bytes inside one bounded block in `~/.copilot/copilot-instructions.md`. Insert that block at the end on first run. Do not fold it into a repo-gated section of that file. Also keep this always-on paragraph outside the bounded block so a Copilot parent reads the dispatch contract before any role launch:
 
 ```text
-When pstack is installed, read the installed plugin's provider-dispatch.md and copilot-tools.md before dispatching a configured role. Copilot is a parent. copilot:* is native. claude:*, codex:*, and grok:* use pstack-runner --parent copilot. Never map claude:fable to terra or codex:gpt-5.6-sol to Copilot Sol.
+When pstack is installed, read the installed plugin's provider-dispatch.md and copilot-tools.md before dispatching a configured role. Copilot is a parent. copilot:* is native. claude:*, codex:*, and grok:* use pstack-runner --parent copilot. Never map claude:fable to terra, codex:gpt-5.6-sol to Copilot Sol, or grok:grok-4.6 to Copilot Grok.
 ```
 
 ## Steps
@@ -138,7 +138,7 @@ Ask 2 or 3. Default 3. Each lane must be a different Copilot-native family. Do n
 Default 3: `copilot:gpt-5.6-terra@high, copilot:gpt-5.6-sol@medium, copilot:kimi-k3@high`
 Default 2: `copilot:gpt-5.6-terra@high, copilot:gpt-5.6-sol@medium`
 
-A named change may pick any 2 or 3 distinct Copilot-native families (terra, sol, luna, opus5, kimi, astra). Apply the chosen list to all four panel roles unless the operator names a per-role exception.
+A named change may pick any 2 or 3 distinct Copilot-native families (terra, sol, luna, opus5, kimi, astra, grok). Apply the chosen list to all four panel roles unless the operator names a per-role exception.
 
 If the loaded sheet still uses the old first-run list (`terra, sol, inherit-parent, kimi`), propose the new 3-lane default. That is the successor first-run, not a reset of a named customization.
 
@@ -148,7 +148,9 @@ Use each Copilot-native family's default effort. That is also its only selectabl
 
 Probe those `copilot:model@effort` pairs. Each probe is a one-turn native `task` to `pstack:pstack-<stem>`. The child must report the configured model. A silent downgrade to the parent session model is a failed probe. A failed probe writes nothing.
 
-Optional CLI families (claude, codex, grok) are extra lanes. Probe them with `pstack-runner --parent copilot` only if the operator asks and the CLI authenticates. They are not the daily default. Never substitute a missing CLI with a Copilot-native family.
+On a Copilot parent, "Grok" as a role family is native `copilot:grok-4.6@high` (`pstack-grok`). Do not write `grok:grok-4.6` unless the operator asked for the Grok CLI extra lane.
+
+Optional CLI families (claude, codex, grok) are extra lanes. Probe them with `pstack-runner --parent copilot` only if the operator asks and the CLI authenticates. They are not the daily default. Never substitute a missing CLI with a Copilot-native family. Never treat a request for Copilot Grok as the Grok CLI route.
 
 ### Copilot first-run sheet
 
@@ -163,7 +165,7 @@ feature, refactoring: copilot:gpt-5.6-luna@xhigh
 bug-fix: copilot:gpt-5.6-sol@medium
 perf-issue: copilot:gpt-5.6-sol@medium
 hillclimb: copilot:gpt-5.6-sol@medium
-judgment and prose: copilot:claude-opus-5@medium
+judgment and prose: copilot:grok-4.6@high
 hardest tasks: copilot:gpt-5.6-terra@high
 how explorer: copilot:gpt-5.6-luna@xhigh
 how explainer: copilot:gpt-5.6-terra@high

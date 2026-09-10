@@ -36,7 +36,7 @@ poteto-mode's Subagents section sets Claude-specific defaults (`subagent_type: "
 
 Do not replace every configured entry with a Copilot model. `/setup-pstack` writes portable descriptors such as `claude:fable@max` and Copilot-native descriptors such as `copilot:gpt-5.6-sol@medium`. In a Copilot parent, only `copilot:*` is native. `codex:gpt-5.6-sol` still means the Codex CLI through the external runner. Never treat Copilot Sol as a silent dispatch of the Codex Sol descriptor.
 
-Claude, Codex, and Grok descriptors use `pstack-runner --parent copilot`. A missing CLI is a loud dropout. Never map `claude:fable` to terra or `grok:*` to luna.
+Claude, Codex, and Grok CLI descriptors use `pstack-runner --parent copilot`. A missing CLI is a loud dropout. Never map `claude:fable` to terra, `grok:*` to luna, or `grok:grok-4.6` to Copilot Grok. `copilot:grok-4.6` is native `pstack-grok`.
 
 Keep Why and Reflect on `inherit-parent` or `auto`. The external runner strips the parent's MCP surface.
 

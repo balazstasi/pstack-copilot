@@ -10,7 +10,7 @@
       "description": "Rigorous, parallelizable agent workflows for the Copilot app and Copilot CLI. Copilot-native parent of pstack.",
       "source": "./",
       "category": "productivity",
-      "version": "1.4.3",
+      "version": "1.4.4",
       "author": {
         "name": "Lauren Tan (original)"
       },

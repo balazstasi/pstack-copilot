@@ -53,4 +53,11 @@ export const COPILOT_NATIVE_FAMILIES: readonly CopilotNativeFamily[] = [
     defaultEffort: "low",
     selectableEfforts: ["low"],
   },
+  {
+    family: "copilot-grok",
+    model: "grok-4.6",
+    stem: "grok",
+    defaultEffort: "high",
+    selectableEfforts: ["high"],
+  },
 ];
