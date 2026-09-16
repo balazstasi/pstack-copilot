@@ -5,6 +5,8 @@ description: "Spawn N parallel candidates at the same task, pick a base, graft t
 
 # Arena
 
+**Usage mode first.** Read [usage-mode.md](../poteto-mode/references/usage-mode.md) unless already resolved this session. In poor mode, execute this skill's reduced workflow in the parent and skip the normal delegated phases below. A bare skill invocation does not authorize a panel.
+
 **Dispatch contract.** Read [`provider-dispatch.md`](../poteto-mode/references/provider-dispatch.md) before fan-out. Configured values are provider-qualified descriptors, not host-native model slugs. The parent starts native and external lanes directly; children never route themselves. On Codex, resolve the remaining Claude tool names via [`codex-tools.md`](../poteto-mode/references/codex-tools.md). On Copilot, resolve them via [`copilot-tools.md`](../poteto-mode/references/copilot-tools.md).
 
 Fan out N parallel attempts at the same task. Read every candidate end to end. Pick the strongest as the base. Graft the best ideas from the others into it. Verify the synthesized result.

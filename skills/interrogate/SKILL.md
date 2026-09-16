@@ -5,6 +5,8 @@ description: "Use for \"interrogate\", \"adversarial review\", \"multi-model rev
 
 # Interrogate
 
+**Usage mode first.** Read [usage-mode.md](../poteto-mode/references/usage-mode.md) unless already resolved this session. In poor mode, execute this skill's reduced workflow in the parent and skip the normal delegated phases below. A bare skill invocation does not authorize a panel.
+
 **Dispatch contract.** Read [`provider-dispatch.md`](../poteto-mode/references/provider-dispatch.md) before launching reviewers. Configured entries are provider-qualified descriptors; the parent starts native and external read-only lanes directly. On Codex, resolve remaining Claude tool names via [`codex-tools.md`](../poteto-mode/references/codex-tools.md). On Copilot, resolve them via [`copilot-tools.md`](../poteto-mode/references/copilot-tools.md).
 
 Spawn one reviewer per configured model to adversarially review code changes. Each model gets the same prompt and rubric. The adversarial signal comes from model diversity, not assigned personas.

@@ -5,6 +5,8 @@ description: "Sketch types, signatures, and module structure before code, then s
 
 # Architect
 
+**Usage mode first.** Read [usage-mode.md](../poteto-mode/references/usage-mode.md) unless already resolved this session. In poor mode, execute this skill's reduced workflow in the parent and skip the normal delegated phases below. A bare skill invocation does not authorize a panel.
+
 **Dispatch contract.** Architect's Arena uses the centralized provider routing in [`provider-dispatch.md`](../poteto-mode/references/provider-dispatch.md). Configured entries are descriptors, not native model slugs. On Codex, resolve remaining Claude tool names via [`codex-tools.md`](../poteto-mode/references/codex-tools.md). On Copilot, resolve them via [`copilot-tools.md`](../poteto-mode/references/copilot-tools.md).
 
 Design before implementing. Sketch types, function signatures, class shapes, and module boundaries with `not implemented` bodies and pseudocode. Synthesize across multiple model perspectives, then fill in code against the chosen sketch. If implementation proves the sketch wrong, throw it out and redesign.

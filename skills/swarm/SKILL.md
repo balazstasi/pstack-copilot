@@ -5,6 +5,8 @@ description: "Fan out N parallel workers, drain them, and return one report. Use
 
 # Swarm
 
+**Usage mode first.** Read [usage-mode.md](../poteto-mode/references/usage-mode.md) unless already resolved this session. In poor mode, execute this skill's reduced workflow in the parent and skip the normal delegated phases below. A bare skill invocation does not authorize a panel.
+
 **Dispatch contract.** Resolve each worker descriptor through [`provider-dispatch.md`](../poteto-mode/references/provider-dispatch.md). The parent starts native and external lanes; workers never route themselves. On Codex, resolve remaining Claude tool names via [`codex-tools.md`](../poteto-mode/references/codex-tools.md). On Copilot, resolve them via [`copilot-tools.md`](../poteto-mode/references/copilot-tools.md).
 
 Fan out N parallel cloud workers. They may cover separate slices, race the same brief, or mix both. The parent waits, aggregates, and returns one report.

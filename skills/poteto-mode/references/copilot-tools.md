@@ -24,6 +24,8 @@ Copilot scans every `*.md` and `*.agent.md` in the plugin agents directory. This
 
 ## Subagent policy
 
+Resolve [usage-mode.md](usage-mode.md) first. In poor mode the parent performs reviews locally; do not spawn `comment-sicko` or other lanes or raise concurrency settings unless the user explicitly authorizes that workflow. The normal defaults below apply only after this gate.
+
 poteto-mode's Subagents section sets Claude-specific defaults (`subagent_type: "poteto-agent"`, `run_in_background: true`). On Copilot:
 
 - Route an ad-hoc subagent through poteto-mode's style by dispatching `poteto-agent`. That profile loads `poteto-mode` with the skill tool first. CLI `--agent` still uses `pstack:poteto-agent`. The Copilot app picker uses `poteto-agent`.

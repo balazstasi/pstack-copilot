@@ -1,5 +1,7 @@
 # Provider dispatch
 
+**Usage gate.** Before resolving models, read [usage-mode.md](usage-mode.md) unless already resolved this session. Poor mode prohibits automatic native and external launches, including judges and retries. Execute the reduced workflow locally. Only explicitly authorized lanes pass this gate; a configured role or skill trigger is not authorization.
+
 pstack model choices are provider-qualified descriptors:
 
 ```text

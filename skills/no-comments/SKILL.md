@@ -5,6 +5,8 @@ description: "Spawn Comment Sicko, fix accepted findings, and offer encodings fo
 
 # No comments
 
+**Usage mode first.** Read [usage-mode.md](../poteto-mode/references/usage-mode.md) unless already resolved this session. In poor mode, execute this skill's reduced workflow in the parent and skip the normal delegated phases below. A bare skill invocation does not authorize a panel.
+
 Spawn Comment Sicko. Act on accepted findings.
 
 Defer to Comment Sicko's fresh perspective.

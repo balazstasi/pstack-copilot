@@ -69,6 +69,18 @@ copilot --agent pstack:poteto-agent
 
 A `sessionStart` hook submits `/poteto-mode` on a new default-agent session and injects a short mandate as `additionalContext` (resume and `-p` included). Copilot may ask you to trust that hook. The prompt hook does not fire on resume or `-p`. The same hook links every `agents/*.agent.md` into `~/.copilot/agents/` so the Copilot app picker and `task()` see file stems. It does not replace a regular file of the same name.
 
+## Economical mode
+
+Say **“I'm poor”** or run `/poor-mode` to save `usage mode: poor` in the current parent's existing model sheet and instruction integration. No model probes are run. The setting applies in future sessions and across nested skills.
+
+Poor mode works in the current agent: targeted reading, proportional design, one implementation, and focused review with relevant tests. Architect no longer launches Arena automatically; Arena compares two brief sketches locally, and Swarm, Interrogate, How, Why, and Reflect run without automatic helpers. Additional model usage requires an explicit request.
+
+- `I'm poor for this task`: temporary override, no configuration writes.
+- `full arena for this task`: allow normal Arena candidates and judge once; keep the saved mode.
+- `normal mode`: restore normal workflows without resetting model choices.
+
+This controls workflow instructions, not the host's token meter or current session model. Existing installations without a mode setting retain normal behavior.
+
 ## Fan-out limits
 
 Before a panel, set these in `~/.copilot/settings.json` so concurrency is at least the configured panel size (3 by default):

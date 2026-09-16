@@ -5,6 +5,10 @@ description: Configure pstack's provider-qualified models, per-family requested 
 
 # Setup pstack
 
+**Usage mode.** For a mode-only request (“I'm poor”, “normal mode”, or a task-only override), use the **poor-mode** skill and stop this setup flow: no model probes or panels are needed. Read [usage-mode.md](../poteto-mode/references/usage-mode.md) before other setup work. `usage mode: poor|normal` and its policy sentence are sheet metadata, not role rows. Preserve them verbatim when rendering either first-run map or a rerun; absent mode means normal. A mode-only sheet is valid and missing model roles are filled from defaults only during model setup.
+
+If poor mode is active and the user requests model configuration, prepare the proposed configuration first and explain which live probes are required. Run only explicitly authorized probes. Skip the automatic mixed-panel smoke and concurrency changes; report that panel readiness remains unverified. Do not let setup silently reset poor mode or treat configuration as permission for a judge panel.
+
 Configure one portable model sheet for the current parent harness. Read [`provider-dispatch.md`](../poteto-mode/references/provider-dispatch.md) before probing or writing anything. Its model matrix, Copilot-native families, descriptor grammar, and route table are the contract. Choose one requested effort per family that this parent will write. Do not add a second configuration file, a runtime resolver, or a weaker-model fallback. On Copilot, also read [`copilot-tools.md`](../poteto-mode/references/copilot-tools.md).
 
 Claude Code writes `~/.claude/pstack-models.md` and loads it from `~/.claude/CLAUDE.md` with:

@@ -5,6 +5,10 @@ description: poteto's agent style for concise, detailed responses, deliberate su
 
 # Poteto mode
 
+## Usage mode
+
+Before applying triggers, read [references/usage-mode.md](references/usage-mode.md) and resolve the saved or task-specific mode. In poor mode, work in the parent, use the reduced workflows, and skip automatic delegation and competing implementations. This takes precedence over the normal triggers, Principles, Subagents section, and playbooks below. Mode changes use the **poor-mode** skill.
+
 ## Platform Adaptation
 
 These skills share one tree across Claude Code, Codex, and Copilot. Read [`references/provider-dispatch.md`](references/provider-dispatch.md) whenever a configured role launches. It defines the provider-qualified model descriptors, native/external route table, launcher, isolation, receipts, and dropout policy. Children never choose routes. When a skill names a Claude tool or built-in skill (`run`, `verify`, `plugin-dev:skill-development`), read [`references/codex-tools.md`](references/codex-tools.md) on Codex and [`references/copilot-tools.md`](references/copilot-tools.md) on Copilot.
